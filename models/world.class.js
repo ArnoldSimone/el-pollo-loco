@@ -9,6 +9,12 @@ class World {
     clouds = [
         new Cloud()
     ];
+    backgroundObjects = [
+        new BackgroundObject('img/5_background/layers/air.png', 0),
+        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
+        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
+        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0)
+    ]
     canvas;
     ctx;
 
@@ -22,6 +28,11 @@ class World {
     draw() {
         // Canvas leeren
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // draw BackgroundObjects
+        this.backgroundObjects.forEach(background => {
+            this.ctx.drawImage(background.img, background.x, background.y, background.width, background.height);
+        });
         // draw Character
         this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height);
         // draw Chickens
@@ -32,6 +43,7 @@ class World {
         this.clouds.forEach(cloud => {
             this.ctx.drawImage(cloud.img, cloud.x, cloud.y, cloud.width, cloud.height);
         });
+
 
 
         // durch diese Funktion wird draw() immer wieder aufgerufen.
