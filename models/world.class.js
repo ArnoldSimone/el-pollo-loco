@@ -1,13 +1,13 @@
 class World {
-
     character = new Character();  // hier legen wir Pepe an von der Schablone Character
-
     level = level1;
     canvas;
     ctx;
     keyboard;
     camera_x = 0; // hier sage ich um wieviel ich die Kamera nach links verschieben möchte
-
+    statusBarBottle = new StatusBarBottle();
+    statusBarHealth = new StatusBarHealth();
+    statusBarCoin = new StatusBarCoin();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');  // hiermit kann mann einfach Dinge auf der Canvas zeichnen
@@ -27,6 +27,7 @@ class World {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
                     this.character.hit();
+                    this.statusBarHealth.setPercentage(this.character.energy);
                 }
             })
         }, 200);
@@ -36,23 +37,22 @@ class World {
     draw() {
         // Canvas leeren
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         // Ausschnitt um x nach links verschieben
         this.ctx.translate(this.camera_x, 0);
-
         // draw BackgroundObjects
         this.addObjectsToMap(this.level.backgroundObjects);
-
         // draw Clouds
         this.addObjectsToMap(this.level.clouds);
         // draw Character
         this.addToMap(this.character);
         // draw Chickens
         this.addObjectsToMap(this.level.enemies);
-
         // Ausschnitt um x nach rechts verschieben
         this.ctx.translate(-this.camera_x, 0);
-
+        // draw StatusBar
+        this.addToMap(this.statusBarBottle);
+        this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarCoin);
         // durch diese Funktion wird draw() immer wieder aufgerufen.
         let self = this;
         requestAnimationFrame(function () {
