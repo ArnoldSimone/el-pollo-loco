@@ -68,6 +68,7 @@ class Character extends MovableObject {
     world;
     walking_sound = new Audio('audio/walking.mp3');
     jump_sound = new Audio('audio/jump.mp3');
+    snoring_sound = new Audio('audio/snoring.mp3');
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -96,7 +97,7 @@ class Character extends MovableObject {
                 this.walking_sound.play();
                 this.inactivityTimer = 0;
             }
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            if ((this.world.keyboard.SPACE) && !this.isAboveGround()) {
                 this.jump();
                 this.walking_sound.pause();
                 this.jump_sound.play();
@@ -104,7 +105,7 @@ class Character extends MovableObject {
             }
             this.world.camera_x = -this.x + 100;
 
-            if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && !this.isAboveGround()) {
+            if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && !this.world.keyboard.D && !this.isAboveGround()) {
                 this.inactivityTimer++; // Increment the inactivity timer
             }
         }, 1000 / 60);
@@ -132,7 +133,7 @@ class Character extends MovableObject {
         }, 100);
 
         setInterval(() => {
-            if (!this.isAboveGround() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && this.inactivityTimer < 360) {
+            if (!this.isAboveGround() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && !this.world.keyboard.D && this.inactivityTimer < 360) {
                 this.playAnimation(this.IMAGES_IDLE);
             }
         }, 200);
@@ -140,6 +141,9 @@ class Character extends MovableObject {
         setInterval(() => {
             if (this.inactivityTimer > 360) {
                 this.playAnimation(this.IMAGES_LONG_IDLE);
+                // this.snoring_sound.play();
+            } else {
+                this.snoring_sound.pause();
             }
         }, 500);
 

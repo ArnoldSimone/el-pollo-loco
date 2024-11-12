@@ -5,6 +5,7 @@ class MovableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
+    bottles = 0;
 
     applyGravity() {
         setInterval(() => {
@@ -16,7 +17,15 @@ class MovableObject extends DrawableObject {
     }
 
     isAboveGround() {
-        return this.y < 160;
+        if (this instanceof ThrowableObject) {
+            return true;  // Geworfene Objekte sind immer "in der Luft"
+        } else if (this instanceof ChickenSmall) {
+            // Spezielle Logik für ChickenSmall, z.B. Höhe 380 für den Boden
+            return this.y < 380;  // Huhn ist in der Luft oder auf dem Boden, wenn y unter 380
+        } else {
+            // Allgemeine Bedingung für andere Objekte, falls nötig
+            return this.y < 160;  // Standardmäßig in der Luft, wenn y unter 160
+        }
     }
 
     // character.isCollining(chicken);
@@ -64,5 +73,7 @@ class MovableObject extends DrawableObject {
     jump() {
         this.speedY = 30;
     }
+
+
 
 }
