@@ -39,13 +39,12 @@ class Chicken extends MovableObject {
     }
 
     die() {
-        this.chickenIsDead = true;  // Markiere das Huhn als tot
+        this.chickenIsDead = true;
         this.chicken_dead_sound.play();
         setTimeout(() => {
-            // Jetzt funktioniert der Zugriff auf `this.world.level.enemies`
             let index = this.world.level.enemies.indexOf(this);
             if (index !== -1) {
-                this.world.level.enemies.splice(index, 1);  // Entferne das Huhn aus der Welt
+                this.world.level.enemies.splice(index, 1);
             }
         }, 500);
     }

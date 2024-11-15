@@ -1,6 +1,5 @@
 class World {
     character = new Character();
-    endboss = new Endboss(this.world);
     level = level1;
     canvas;
     ctx;
@@ -15,20 +14,20 @@ class World {
     collectedCoins = 0;
     brocken_bottle_sound = new Audio('audio/broken-bottle.mp3');
     coin_sound = new Audio('audio/coin.mp3');
+    collect_bottle_sound = new Audio('audio/collect-bottle.mp3');
     defenseStart = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');  // hiermit kann mann einfach Dinge auf der Canvas zeichnen
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.draw();
         this.setWorld();
+        this.draw();
         this.run();
     }
 
     setWorld() {
         this.character.world = this;
-        this.endboss.world = this;
         this.level.enemies.forEach(enemy => {
             enemy.world = this;
         });
@@ -37,19 +36,16 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisionsChicken();
-            this.checkCollisionsEndboss();
             this.checkThrowObjects();
             this.checkCollisionsBottle();
             this.checkCollisionsCoin();
             this.checkCollisionBottleAndChicken();
-            this.checkCollisionBottleAndEndboss();
+            this.checkdefenseEndboss();
         }, 100);
         setInterval(() => {
             this.checkJumpOfChicken();
-            this.checkdefenseEndboss();
         }, 1000 / 60);
     }
-
 
     checkThrowObjects() {
         if (this.keyboard.D && this.collectedBottles > 0) {
@@ -74,13 +70,6 @@ class World {
         })
     }
 
-    checkCollisionsEndboss() {
-        if (this.character.isColliding(this.endboss)) {
-            this.character.hit();
-            this.statusBarHealth.setPercentage(this.character.energy);
-        }
-    }
-
     checkJumpOfChicken() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isJumpOfChicken(enemy) && this.character.isAboveGround() && this.character.speedY < 0) {
@@ -94,6 +83,7 @@ class World {
         this.level.bottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle)) {
                 this.level.bottles.splice(index, 1);
+                this.collect_bottle_sound.play();
                 this.collectedBottles += 20;
                 this.statusBarBottle.setPercentage(this.collectedBottles);
             }
@@ -102,22 +92,19 @@ class World {
 
     checkCollisionBottleAndChicken() {
         this.throwableObjects.forEach((bottle, bottleIndex) => {
-            this.level.enemies.forEach((enemy, enemyIndex) => {
+            this.level.enemies.forEach((enemy) => {
                 if (bottle.isColliding(enemy)) {
-                    enemy.die();
+                    if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
+                        enemy.die();
+                    }
+                    if (enemy instanceof Endboss) {
+                        enemy.hit();
+                        this.statusBarEndboss.setPercentage(enemy.energy);
+                        this.brocken_bottle_sound.play();
+                    }
                     this.throwableObjects.splice(bottleIndex, 1);
                 }
             });
-        });
-    }
-
-    checkCollisionBottleAndEndboss() {
-        this.throwableObjects.forEach((bottle) => {
-            if (bottle.isColliding(this.endboss)) {
-                this.endboss.hit();
-                this.statusBarEndboss.setPercentage(this.endboss.energy);
-                this.brocken_bottle_sound.play();
-            }
         });
     }
 
@@ -126,7 +113,6 @@ class World {
             this.defenseStart = true;
         }
     }
-
 
     checkCollisionsCoin() {
         this.level.coins.forEach((coin, index) => {
@@ -155,7 +141,7 @@ class World {
         this.addObjectsToMap(this.level.coins);
         // draw Character
         this.addToMap(this.character);
-        this.addToMap(this.endboss);
+        // this.addToMap(this.endboss);
         // draw Chickens
         this.addObjectsToMap(this.level.enemies);
 

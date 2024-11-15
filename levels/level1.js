@@ -1,20 +1,19 @@
-
-
 let level1 = new Level(
     [
-        // new Endboss(),
+        new Endboss(),
         new Chicken(),
         new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new ChickenSmall(),
-        new ChickenSmall(),
-        new ChickenSmall(),
+        // new Chicken(),
+        // new Chicken(),
+        // new Chicken(),
+        // new Chicken(),
+        // new Chicken(),
+        // new ChickenSmall(),
+        // new ChickenSmall(),
+        // new ChickenSmall(),
         new ChickenSmall(),
         new ChickenSmall()
+
     ],
     [
         new Cloud('img/5_background/layers/4_clouds/1.png', -300),
@@ -44,12 +43,6 @@ let level1 = new Level(
         new Coin((1900 + Math.random() * 500), (50 + Math.random() * 300))
     ],
     [
-        new Bottle(),
-        new Bottle(),
-        new Bottle(),
-        new Bottle(),
-        new Bottle(),
-        new Bottle(),
         new Bottle(),
         new Bottle(),
         new Bottle(),

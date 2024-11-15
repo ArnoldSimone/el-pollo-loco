@@ -48,7 +48,11 @@ class MovableObject extends DrawableObject {
     }
 
     hit() {
-        this.energy -= 5;
+        if (this instanceof Endboss) {
+            this.energy -= 25;
+        } else {
+            this.energy -= 5;
+        }
         if (this.energy < 0) {
             this.energy = 0;
         } else {
@@ -60,9 +64,10 @@ class MovableObject extends DrawableObject {
         return this.energy == 0;
     }
 
-    defense() {
-        this.moveLeft();
-
+    defenseEndbossStart() {
+        if (this.world) {
+            return this.world.defenseStart;
+        }
     }
 
     isHurt() {
@@ -89,7 +94,5 @@ class MovableObject extends DrawableObject {
     jump() {
         this.speedY = 30;
     }
-
-
 
 }
