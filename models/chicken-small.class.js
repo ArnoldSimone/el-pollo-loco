@@ -9,9 +9,14 @@ class ChickenSmall extends MovableObject {
         'img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
     ];
 
+    IMAGEG_DEAD_CHICKEN_SMALL = 'img/3_enemies_chicken/chicken_small/2_dead/dead.png';
+    chickenIsDead = false;
+    chicken_dead_sound = new Audio('audio/chicken-small-dead.mp3');
+
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
+        this.loadImage('img/3_enemies_chicken/chicken_small/2_dead/dead.png');
         this.x = 300 + Math.random() * 2300;
         this.speed = 0.15 + Math.random() * 0.25;  // Zufällige Zahl zwischen 0.15 und 0.25
         this.animate();
@@ -19,28 +24,47 @@ class ChickenSmall extends MovableObject {
     }
 
     animate() {
-
         setInterval(() => {
-            // move left
-            this.moveLeft();
+            if (!this.chickenIsDead) {
+                this.moveLeft();
+            } else {
+                this.loadImage(this.IMAGEG_DEAD_CHICKEN_SMALL);
+                this.speedY = 0;
+            }
         }, 1000 / 60);
 
         let randomDelay = Math.random() * 3000;
         setTimeout(() => {
-            this.jumpChickenSmall();
+            if (!this.chickenIsDead) {
+                this.jumpChickenSmall();
+            }
         }, randomDelay);
 
         setInterval(() => {
-            // walk animation
-            this.playAnimation(this.IMAGES_WALKING);
+            if (!this.chickenIsDead) {
+                this.playAnimation(this.IMAGES_WALKING);
+            }
         }, 200);
     }
 
     jumpChickenSmall() {
-        let randomInterval = Math.random() * (6000 - 3000) + 2000;  // Intervall zwischen 2 und 6 Sekunden
-        setInterval(() => {
-            this.speedY = 20; // Setzt die Sprungkraft
-        }, randomInterval);
+        if (!this.chickenIsDead) {
+            let randomInterval = Math.random() * (6000 - 3000) + 2000;
+            setInterval(() => {
+                this.speedY = 15;
+            }, randomInterval);
+        }
+    }
+
+    die() {
+        this.chickenIsDead = true;
+        this.chicken_dead_sound.play();
+        setTimeout(() => {
+            let index = this.world.level.enemies.indexOf(this);
+            if (index !== -1) {
+                this.world.level.enemies.splice(index, 1);
+            }
+        }, 500);
     }
 
 

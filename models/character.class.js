@@ -3,7 +3,7 @@ class Character extends MovableObject {
     height = 270;
     y = 160;
     x = 100;
-    speed = 10;
+    speed = 6;
     speedJump = 30;
     inactivityTimer = 0;
 
@@ -91,7 +91,7 @@ class Character extends MovableObject {
                 this.walking_sound.play();
                 this.inactivityTimer = 0;
             }
-            if (this.world.keyboard.LEFT && this.x > -620) {
+            if (this.world.keyboard.LEFT && this.x > -600) {
                 this.moveLeft();
                 this.otherDirection = true;
                 this.walking_sound.play();
@@ -103,10 +103,14 @@ class Character extends MovableObject {
                 this.jump_sound.play();
                 this.inactivityTimer = 0;
             }
-            this.world.camera_x = -this.x + 100;
 
+            this.world.camera_x = -this.x + 100;
+            this.world.camera_x_slow = -this.x * this.world.speed_slow + 100;
             if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && !this.world.keyboard.D && !this.isAboveGround()) {
                 this.inactivityTimer++; // Increment the inactivity timer
+            }
+            if (this.world.keyboard.D) {
+                this.inactivityTimer = 0;
             }
         }, 1000 / 60);
 
@@ -131,7 +135,6 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_JUMPING);
             }
         }, 100);
-
         setInterval(() => {
             if (!this.isAboveGround() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && !this.world.keyboard.D && this.inactivityTimer < 360) {
                 this.playAnimation(this.IMAGES_IDLE);

@@ -9,9 +9,14 @@ class Chicken extends MovableObject {
         'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
     ];
 
+    IMAGE_DEAD_CHICKEN = 'img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
+    chickenIsDead = false;
+    chicken_dead_sound = new Audio('audio/chicken-dead.mp3');
+
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
+        this.loadImage('img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
         this.x = 300 + Math.random() * 2300;
         this.speed = 0.15 + Math.random() * 0.4;  // Zufällige Zahl zwischen 0.15 und 0.4
         this.animate();
@@ -19,10 +24,30 @@ class Chicken extends MovableObject {
 
     animate() {
         setInterval(() => {
-            this.moveLeft();
+            if (!this.chickenIsDead) {
+                this.moveLeft();
+            } else {
+                this.loadImage(this.IMAGE_DEAD_CHICKEN);
+            }
         }, 1000 / 60);
+
         setInterval(() => {
-            this.playAnimation(this.IMAGES_WALKING);
+            if (!this.chickenIsDead) {
+                this.playAnimation(this.IMAGES_WALKING);
+            }
         }, 200);
     }
+
+    die() {
+        this.chickenIsDead = true;  // Markiere das Huhn als tot
+        this.chicken_dead_sound.play();
+        setTimeout(() => {
+            // Jetzt funktioniert der Zugriff auf `this.world.level.enemies`
+            let index = this.world.level.enemies.indexOf(this);
+            if (index !== -1) {
+                this.world.level.enemies.splice(index, 1);  // Entferne das Huhn aus der Welt
+            }
+        }, 500);
+    }
 }
+

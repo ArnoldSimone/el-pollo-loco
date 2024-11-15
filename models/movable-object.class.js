@@ -6,6 +6,9 @@ class MovableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
     bottles = 0;
+    coins = 0;
+    energyEndboss = 100;
+
 
     applyGravity() {
         setInterval(() => {
@@ -32,8 +35,16 @@ class MovableObject extends DrawableObject {
     isColliding(mo) {
         return this.x + this.width > mo.x &&
             this.y + this.height > mo.y &&
-            this.x < mo.x &&
+            this.x < mo.x + mo.width &&
             this.y < mo.y + mo.height;
+    }
+
+    isJumpOfChicken(mo) {
+        // Check if the character is directly above the enemy (y-Position)
+        return this.x + this.width > mo.x &&
+            this.x < mo.x + mo.width &&
+            this.y + this.height - 60 < mo.y && // Adjust to ensure the character is above the enemy
+            this.y + this.height > mo.y;  // Make sure the character is falling onto the chicken
     }
 
     hit() {
@@ -47,6 +58,11 @@ class MovableObject extends DrawableObject {
 
     isDead() {
         return this.energy == 0;
+    }
+
+    defense() {
+        this.moveLeft();
+
     }
 
     isHurt() {

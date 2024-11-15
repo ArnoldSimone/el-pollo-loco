@@ -1,16 +1,20 @@
-const level1 = new Level(
+
+
+let level1 = new Level(
     [
-        new Endboss(),
+        // new Endboss(),
         new Chicken(),
         new Chicken(),
         new Chicken(),
-        // new Chicken(),
-        // new Chicken(),
-        // new ChickenSmall(),
-        // new ChickenSmall(),
-        // new ChickenSmall(),
-        // new ChickenSmall(),
-        // new ChickenSmall()
+        new Chicken(),
+        new Chicken(),
+        new Chicken(),
+        new Chicken(),
+        new ChickenSmall(),
+        new ChickenSmall(),
+        new ChickenSmall(),
+        new ChickenSmall(),
+        new ChickenSmall()
     ],
     [
         new Cloud('img/5_background/layers/4_clouds/1.png', -300),
@@ -22,6 +26,31 @@ const level1 = new Level(
         new Cloud('img/5_background/layers/4_clouds/2.png', 3300)
     ],
     [
+        new Coin(360, 70),
+        new Coin(430, 30),
+        new Coin(500, 10),
+        new Coin(570, 30),
+        new Coin(640, 70),
+        new Coin((800 + Math.random() * 500), (50 + Math.random() * 300)),
+        new Coin((800 + Math.random() * 500), (50 + Math.random() * 300)),
+        new Coin((800 + Math.random() * 500), (50 + Math.random() * 300)),
+        new Coin(1500, 80),
+        new Coin(1550, 60),
+        new Coin(1600, 50),
+        new Coin(1650, 60),
+        new Coin(1700, 80),
+        new Coin((1900 + Math.random() * 500), (50 + Math.random() * 300)),
+        new Coin((1900 + Math.random() * 500), (50 + Math.random() * 300)),
+        new Coin((1900 + Math.random() * 500), (50 + Math.random() * 300))
+    ],
+    [
+        new Bottle(),
+        new Bottle(),
+        new Bottle(),
+        new Bottle(),
+        new Bottle(),
+        new Bottle(),
+        new Bottle(),
         new Bottle(),
         new Bottle(),
         new Bottle(),
