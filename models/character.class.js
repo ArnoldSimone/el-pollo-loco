@@ -6,6 +6,12 @@ class Character extends MovableObject {
     speed = 6;
     speedJump = 30;
     inactivityTimer = 0;
+    offset = {
+        top: 120,
+        bottom: 10,
+        left: 25,
+        right: 35
+    };
 
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
@@ -80,6 +86,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.animate();
         this.applyGravity();
+        this.applyHit();
     }
 
     animate() {
@@ -116,14 +123,11 @@ class Character extends MovableObject {
 
         setInterval(() => {
             if (this.isDead()) {
-                // is dead
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (this.isHurt()) {
-                // walk animation
                 this.playAnimation(this.IMAGES_HURT);
             } else {
                 if (!this.isAboveGround() && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
-                    // walk animation
                     this.playAnimation(this.IMAGES_WALKING);
                 }
             }
@@ -131,10 +135,10 @@ class Character extends MovableObject {
 
         setInterval(() => {
             if (this.isAboveGround()) {
-                // jump animation
                 this.playAnimation(this.IMAGES_JUMPING);
             }
         }, 100);
+
         setInterval(() => {
             if (!this.isAboveGround() && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && !this.world.keyboard.D && this.inactivityTimer < 360) {
                 this.playAnimation(this.IMAGES_IDLE);
@@ -150,10 +154,6 @@ class Character extends MovableObject {
             }
         }, 500);
 
-
-
     }
-
-
 
 }

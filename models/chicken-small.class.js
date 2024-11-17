@@ -3,6 +3,7 @@ class ChickenSmall extends MovableObject {
     width = 40;
     height = 40;
 
+
     IMAGES_WALKING = [
         'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
         'img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
@@ -56,7 +57,7 @@ class ChickenSmall extends MovableObject {
         }
     }
 
-    die() {
+    enemyIsDead() {
         this.chickenIsDead = true;
         this.chicken_dead_sound.play();
         setTimeout(() => {

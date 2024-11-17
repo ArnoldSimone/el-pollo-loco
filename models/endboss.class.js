@@ -2,8 +2,13 @@ class Endboss extends MovableObject {
     y = 50;
     width = 300;
     height = 400;
-    x = 2500; //2500
-
+    x = 2500;
+    offset = {
+        top: 150,
+        bottom: 80,
+        left: 60,
+        right: 60
+    };
 
     IMAGES_WALK = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -44,6 +49,8 @@ class Endboss extends MovableObject {
     endboss_hit_sound = new Audio('audio/endboss-hit.mp3');
     endboss_dead_sound = new Audio('audio/win.mp3');
 
+    deadSoundPlayed = false;
+
     constructor() {
         super().loadImage('img/4_enemie_boss_chicken/2_alert/G5.png');
         this.loadImages(this.IMAGES_WALK);
@@ -57,29 +64,34 @@ class Endboss extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (this.defenseEndbossStart()) {
+            if (this.defenseEndbossStart() && !this.isDead() && !this.isHurt()) {
                 this.moveLeft();
             }
         }, 1000 / 60);
 
         setInterval(() => {
             if (this.isDead()) {
-                this.endboss_dead_sound.play();
+                if (!this.deadSoundPlayed) {
+                    this.endboss_dead_sound.play();
+                    this.deadSoundPlayed = true;
+                }
                 this.playAnimation(this.IMAGES_DEAD);
                 setTimeout(() => {
                     this.endboss_dead_sound.pause();
-                }, 3000);
-            } else if (this.isHurt()) {
+                    this.endboss_dead_sound.currentTime = 0; // Setzt die Wiedergabe zurück
+                }, 4000);
+            } else if (this.isHurt() && !this.isDead()) {
                 this.endboss_hit_sound.play();
                 this.playAnimation(this.IMAGES_HURT);
                 setTimeout(() => {
                     this.playAnimation(this.IMAGES_ATTACK);
                 }, 2000);
-            } else if (this.defenseEndbossStart()) {
+            } else if (this.defenseEndbossStart() && !this.isDead()) {
                 this.playAnimation(this.IMAGES_WALK);
             } else {
                 this.playAnimation(this.IMAGES_ALERT);
             }
         }, 200);
+
     }
 } 

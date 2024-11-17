@@ -16,6 +16,7 @@ class World {
     coin_sound = new Audio('audio/coin.mp3');
     collect_bottle_sound = new Audio('audio/collect-bottle.mp3');
     defenseStart = false;
+    endbossHit = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');  // hiermit kann mann einfach Dinge auf der Canvas zeichnen
@@ -44,6 +45,7 @@ class World {
         }, 100);
         setInterval(() => {
             this.checkJumpOfChicken();
+
         }, 1000 / 60);
     }
 
@@ -62,18 +64,26 @@ class World {
     }
 
     checkCollisionsChicken() {
+        let handleFirstContact = false;
+
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && !this.character.isJumpOfChicken(enemy)) {
-                this.character.hit();
-                this.statusBarHealth.setPercentage(this.character.energy);
+                if (!handleFirstContact) {
+                    this.character.hit();
+                    this.statusBarHealth.setPercentage(this.character.energy);
+                    this.character.speedX = -12;
+                    this.character.checkCollisionDirection(enemy);
+                    handleFirstContact = true;
+                }
             }
-        })
+        });
     }
 
     checkJumpOfChicken() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isJumpOfChicken(enemy) && this.character.isAboveGround() && this.character.speedY < 0) {
-                enemy.die();
+                this.character.speedY = 0;
+                enemy.enemyIsDead();
                 this.character.jump();
             }
         })
@@ -95,9 +105,10 @@ class World {
             this.level.enemies.forEach((enemy) => {
                 if (bottle.isColliding(enemy)) {
                     if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
-                        enemy.die();
+                        enemy.enemyIsDead();
                     }
                     if (enemy instanceof Endboss) {
+                        this.endbossHit = true;
                         enemy.hit();
                         this.statusBarEndboss.setPercentage(enemy.energy);
                         this.brocken_bottle_sound.play();
@@ -109,7 +120,7 @@ class World {
     }
 
     checkdefenseEndboss() {
-        if (this.character.x > 2000 && !this.defenseStart) {
+        if (this.character.x > 2200 && !this.defenseStart || this.endbossHit == true) {
             this.defenseStart = true;
         }
     }
@@ -141,7 +152,6 @@ class World {
         this.addObjectsToMap(this.level.coins);
         // draw Character
         this.addToMap(this.character);
-        // this.addToMap(this.endboss);
         // draw Chickens
         this.addObjectsToMap(this.level.enemies);
 
