@@ -12,7 +12,8 @@ class ChickenSmall extends MovableObject {
 
     IMAGEG_DEAD_CHICKEN_SMALL = 'img/3_enemies_chicken/chicken_small/2_dead/dead.png';
     chickenIsDead = false;
-    chicken_dead_sound = new Audio('audio/chicken-small-dead.mp3');
+
+    chickenSmall_dead_sound = new Audio('audio/chicken-small-dead.mp3');
 
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
@@ -22,6 +23,8 @@ class ChickenSmall extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.25;  // Zufällige Zahl zwischen 0.15 und 0.25
         this.animate();
         this.applyGravity();
+        this.soundManager = world.soundManager;
+        this.soundManager.registerSound(this.chickenSmall_dead_sound);
     }
 
     animate() {
@@ -59,7 +62,7 @@ class ChickenSmall extends MovableObject {
 
     enemyIsDead() {
         this.chickenIsDead = true;
-        this.chicken_dead_sound.play();
+        this.soundManager.playSound(this.chickenSmall_dead_sound);
         setTimeout(() => {
             let index = this.world.level.enemies.indexOf(this);
             if (index !== -1) {

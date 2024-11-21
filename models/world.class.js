@@ -1,6 +1,6 @@
 class World {
-    character = new Character();
-    level = level1;
+    character;
+    level;
     canvas;
     ctx;
     keyboard;
@@ -17,15 +17,34 @@ class World {
     collect_bottle_sound = new Audio('audio/collect-bottle.mp3');
     defenseStart = false;
     endbossHit = false;
+    showEndbossStatus = false;
+    soundManager;
 
     constructor(canvas, keyboard) {
-        this.ctx = canvas.getContext('2d');  // hiermit kann mann einfach Dinge auf der Canvas zeichnen
+        this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.soundManager = new SoundManager();
+        this.soundManager.registerSound(this.coin_sound);
+        this.soundManager.registerSound(this.brocken_bottle_sound);
+        this.soundManager.registerSound(this.collect_bottle_sound);
+    }
+
+    startGame() {
+        initLevel1();
+        this.level = level1;
+        this.character = new Character(this);
+        this.character.soundManager = this.soundManager;
+        this.level.enemies.forEach(enemy => {
+            if (enemy instanceof ChickenSmall) {
+                enemy.soundManager = this.soundManager;  // SoundManager an alle Enemies übergeben
+            }
+        });
         this.setWorld();
         this.draw();
         this.run();
     }
+
 
     setWorld() {
         this.character.world = this;
@@ -93,7 +112,7 @@ class World {
         this.level.bottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle)) {
                 this.level.bottles.splice(index, 1);
-                this.collect_bottle_sound.play();
+                this.soundManager.playSound(this.collect_bottle_sound);
                 this.collectedBottles += 20;
                 this.statusBarBottle.setPercentage(this.collectedBottles);
             }
@@ -111,7 +130,7 @@ class World {
                         this.endbossHit = true;
                         enemy.hit();
                         this.statusBarEndboss.setPercentage(enemy.energy);
-                        this.brocken_bottle_sound.play();
+                        this.soundManager.playSound(this.brocken_bottle_sound);
                     }
                     this.throwableObjects.splice(bottleIndex, 1);
                 }
@@ -128,7 +147,7 @@ class World {
     checkCollisionsCoin() {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
-                this.coin_sound.play();
+                this.soundManager.playSound(this.coin_sound);
                 this.level.coins.splice(index, 1);
                 this.collectedCoins += 5;
                 this.statusBarCoin.setPercentage(this.collectedCoins);
@@ -150,6 +169,12 @@ class World {
         this.addObjectsToMap(this.level.bottles);
         // draw Coins
         this.addObjectsToMap(this.level.coins);
+        this.ctx.translate(-this.camera_x, 0);
+        this.addToMap(this.statusBarBottle);
+        this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarCoin);
+        this.ctx.translate(this.camera_x, 0);
+
         // draw Character
         this.addToMap(this.character);
         // draw Chickens
@@ -160,10 +185,12 @@ class World {
         // Ausschnitt um x nach rechts verschieben
         this.ctx.translate(-this.camera_x, 0);
         // draw StatusBar
-        this.addToMap(this.statusBarBottle);
-        this.addToMap(this.statusBarHealth);
-        this.addToMap(this.statusBarCoin);
-        this.addToMap(this.statusBarEndboss);
+
+
+        if (this.showEndbossStatus) {
+            this.addToMap(this.statusBarEndboss);
+        }
+
         // durch diese Funktion wird draw() immer wieder aufgerufen.
         let self = this;
         requestAnimationFrame(function () {

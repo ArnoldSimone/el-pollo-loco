@@ -1,54 +1,85 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let gameStarted = false;
+let fullscreen = false;
+let soundOn = false;
+let bgMusic = new Audio('audio/salsa.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.1;
 
-function init() {
+function initGame() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-
-    console.log('My Character is', world.character);
 }
 
 
-window.addEventListener('keydown', (e) => {
-    if (e.keyCode == 39) {
-        keyboard.RIGHT = true;
-    }
-    if (e.keyCode == 37) {
-        keyboard.LEFT = true;
-    }
-    if (e.keyCode == 38) {
-        keyboard.UP = true;
-    }
-    if (e.keyCode == 40) {
-        keyboard.DOWN = true;
-    }
-    if (e.keyCode == 32) {
-        keyboard.SPACE = true;
-    }
-    if (e.keyCode == 68) {
-        keyboard.D = true;
-    }
-});
+function startGame() {
+    let startScreen = document.getElementById('startScreen');
 
-window.addEventListener('keyup', (e) => {
-    if (e.keyCode == 39) {
-        keyboard.RIGHT = false;
+    if (!gameStarted) {
+        startScreen.classList.add('dnone');
+        world.startGame();
+        gameStarted = true;
+    } else {
+        // restartGame();
     }
-    if (e.keyCode == 37) {
-        keyboard.LEFT = false;
+}
+
+function toggleSound() {
+    let iconSound = document.getElementById('iconSound');
+    let soundOffPath = 'icons/sound-off.png';
+    let soundOnPath = 'icons/sound-play.png';
+
+    if (soundOn) {
+        soundOn = false;
+        iconSound.src = soundOffPath;
+        world.soundManager.toggleSound();
+        bgMusic.pause();
+    } else {
+        soundOn = true;
+        iconSound.src = soundOnPath;
+        world.soundManager.toggleSound();
+        bgMusic.play();
     }
-    if (e.keyCode == 38) {
-        keyboard.UP = false;
+
+}
+
+
+function openFullscreen() {
+    let content = document.getElementById('content');
+    let iconFullscreen = document.getElementById('iconFullscreen');
+
+    if (!document.fullscreenElement) {
+        enterFullscreen(content);
+        iconFullscreen.src = 'icons/minimize.png';
+    } else {
+        exitFullscreen();
+        iconFullscreen.src = 'icons/fullscreen.png';
     }
-    if (e.keyCode == 40) {
-        keyboard.DOWN = false;
+}
+
+
+function enterFullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
     }
-    if (e.keyCode == 32) {
-        keyboard.SPACE = false;
+}
+
+
+function exitFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
     }
-    if (e.keyCode == 68) {
-        keyboard.D = false;
-    }
-});
+}
+
+
 

@@ -46,6 +46,8 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G25.png',
         'img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
+
+    soundManager = new SoundManager();
     endboss_hit_sound = new Audio('audio/endboss-hit.mp3');
     endboss_dead_sound = new Audio('audio/win.mp3');
 
@@ -60,19 +62,23 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.speed = 1;
         this.animate();
+        this.soundManager = world.soundManager;
+        this.soundManager.registerSound(this.endboss_hit_sound);
+        this.soundManager.registerSound(this.endboss_dead_sound);
     }
 
     animate() {
         setInterval(() => {
             if (this.defenseEndbossStart() && !this.isDead() && !this.isHurt()) {
                 this.moveLeft();
+                this.world.showEndbossStatus = true;
             }
         }, 1000 / 60);
 
         setInterval(() => {
             if (this.isDead()) {
                 if (!this.deadSoundPlayed) {
-                    this.endboss_dead_sound.play();
+                    this.soundManager.playSound(this.endboss_dead_sound);
                     this.deadSoundPlayed = true;
                 }
                 this.playAnimation(this.IMAGES_DEAD);
@@ -81,7 +87,7 @@ class Endboss extends MovableObject {
                     this.endboss_dead_sound.currentTime = 0; // Setzt die Wiedergabe zurück
                 }, 4000);
             } else if (this.isHurt() && !this.isDead()) {
-                this.endboss_hit_sound.play();
+                this.soundManager.playSound(this.endboss_hit_sound);
                 this.playAnimation(this.IMAGES_HURT);
                 setTimeout(() => {
                     this.playAnimation(this.IMAGES_ATTACK);

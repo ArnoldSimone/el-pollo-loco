@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="icons/sombrero.png" type="image/x-icon">
     <title>El Pollo Loco</title>
+
+    <script src="models/soundManager.class.js"></script>
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
     <script src="models/background-object.class.js"></script>
@@ -27,13 +29,43 @@
     <script src="models/throwable-object.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="js/game.js"></script>
+
 </head>
 
-<body onload="init()">
-    <button>Start</button>
+<body onload="initGame()">
+
     <h1>El Pollo Loco</h1>
-    <canvas id="canvas" width="720" height="480">
-    </canvas>
+    <section id="content" class="content">
+        <div id="startScreen" class="start-screen">
+            <img id="startScreenImg" class="start-screen-img" src="img/9_intro_outro_screens/start/startscreen_2.png"
+                alt="">
+
+            <div id="start-button-content" class="start-button-content">
+                <span onclick="startGame()" id="startBtn" class="start-button">START</span>
+            </div>
+        </div>
+
+        <div id="controlButtons" class="control-buttons">
+            <div id="infoBtn" class="btn-group info-btn">
+                <img id="iconInfo" class="img-btn" src="icons/info.png" alt="">
+            </div>
+            <div onclick="toggleSound()" id="sountBtn" class="btn-group sound-btn">
+                <img id="iconSound" class="img-btn" src="icons/sound-off.png" alt="">
+            </div>
+            <div onclick="openFullscreen()" id="fullscreenBtn" class="btn-group fullscreen-btn">
+                <img id="iconFullscreen" class="img-btn" src="icons/fullscreen.png" alt="">
+            </div>
+        </div>
+
+        <div id="infoScreen" class="info-screen"></div>
+        <div id="mobilePlayPanel" class="mobile-play-panel"></div>
+        <div id="portraitWarningMobile" class="portrait-warning"></div>
+        <div id="endScreen" class="end-Screen"></div>
+
+
+        <canvas id="canvas" width="720" height="480">
+        </canvas>
+    </section>
 
 </body>
 

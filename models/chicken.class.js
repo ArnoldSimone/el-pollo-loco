@@ -12,6 +12,7 @@ class Chicken extends MovableObject {
 
     IMAGE_DEAD_CHICKEN = 'img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
     chickenIsDead = false;
+
     chicken_dead_sound = new Audio('audio/chicken-dead.mp3');
 
     constructor() {
@@ -21,6 +22,8 @@ class Chicken extends MovableObject {
         this.x = 300 + Math.random() * 2300;
         this.speed = 0.15 + Math.random() * 0.4;  // Zufällige Zahl zwischen 0.15 und 0.4
         this.animate();
+        this.soundManager = world.soundManager;
+        this.soundManager.registerSound(this.chicken_dead_sound);
     }
 
     animate() {
@@ -41,7 +44,7 @@ class Chicken extends MovableObject {
 
     enemyIsDead() {
         this.chickenIsDead = true;
-        this.chicken_dead_sound.play();
+        this.soundManager.playSound(this.chicken_dead_sound);
         setTimeout(() => {
             let index = this.world.level.enemies.indexOf(this);
             if (index !== -1) {

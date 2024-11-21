@@ -4,7 +4,7 @@ class Character extends MovableObject {
     y = 160;
     x = 100;
     speed = 6;
-    speedJump = 30;
+    speedJump = 25;
     inactivityTimer = 0;
     offset = {
         top: 120,
@@ -87,6 +87,10 @@ class Character extends MovableObject {
         this.animate();
         this.applyGravity();
         this.applyHit();
+        this.soundManager = world.soundManager;
+        this.soundManager.registerSound(this.walking_sound);
+        this.soundManager.registerSound(this.jump_sound);
+        this.soundManager.registerSound(this.snoring_sound);
     }
 
     animate() {
@@ -95,19 +99,19 @@ class Character extends MovableObject {
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
-                this.walking_sound.play();
+                this.soundManager.playSound(this.walking_sound);
                 this.inactivityTimer = 0;
             }
             if (this.world.keyboard.LEFT && this.x > -600) {
                 this.moveLeft();
                 this.otherDirection = true;
-                this.walking_sound.play();
+                this.soundManager.playSound(this.walking_sound);
                 this.inactivityTimer = 0;
             }
             if ((this.world.keyboard.SPACE) && !this.isAboveGround()) {
                 this.jump();
                 this.walking_sound.pause();
-                this.jump_sound.play();
+                this.soundManager.playSound(this.jump_sound);
                 this.inactivityTimer = 0;
             }
 
@@ -148,7 +152,7 @@ class Character extends MovableObject {
         setInterval(() => {
             if (this.inactivityTimer > 360) {
                 this.playAnimation(this.IMAGES_LONG_IDLE);
-                // this.snoring_sound.play();
+                this.soundManager.playSound(this.snoring_sound);
             } else {
                 this.snoring_sound.pause();
             }
