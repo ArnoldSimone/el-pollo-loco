@@ -25,9 +25,22 @@ class MovableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;  // hier verändern wir die y-Position
                 this.speedY -= this.acceleration; // hier verändern wir die Geschwindigkeit
+                this.setCorrectGround();
+            }
+            if (this.isDead()) {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
             }
         }, 1000 / 25);
     }
+
+
+    setCorrectGround() {
+        if (this.y > 160 && this instanceof Character) {
+            this.y = 160;
+        }
+    }
+
 
     applyHit() {
         setInterval(() => {
@@ -51,13 +64,19 @@ class MovableObject extends DrawableObject {
         } else if (this instanceof ChickenSmall) {
             // Spezielle Logik für ChickenSmall, z.B. Höhe 380 für den Boden
             return this.y < 380;  // Huhn ist in der Luft oder auf dem Boden, wenn y unter 380
+        } else if (this instanceof Endboss) {
+            // Spezielle Logik für ChickenSmall, z.B. Höhe 380 für den Boden
+            return this.y < 50;  // Huhn ist in der Luft oder auf dem Boden, wenn y unter 380
         } else {
             // Allgemeine Bedingung für andere Objekte, falls nötig
             return this.y < 160;  //  Standardmäßig in der Luft, wenn y unter 160
         }
     }
 
-    // character.isCollining(chicken);
+
+
+
+    // character.isColliding(chicken);
     isColliding(mo) {
         return this.x + this.width - this.offset.right > mo.x + mo.offset.left && // 
             this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
@@ -75,7 +94,6 @@ class MovableObject extends DrawableObject {
                 this.collisionRight = false;
             }
             else if (thisCenterX > otherCenterX) {
-                console.log('collision right');
                 this.collisionRight = true;
                 this.collisionLeft = false;
             }
@@ -104,6 +122,7 @@ class MovableObject extends DrawableObject {
             this.energy = 0;
         }
         this.lastHit = new Date().getTime();
+
     }
 
     isHurt() {
@@ -138,7 +157,7 @@ class MovableObject extends DrawableObject {
     }
 
     jump() {
-        this.speedY = 25;
+        this.speedY = 25; // Normale Sprungkraft
     }
 
 }

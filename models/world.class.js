@@ -12,13 +12,14 @@ class World {
     throwableObjects = [];
     collectedBottles = 0;
     collectedCoins = 0;
-    brocken_bottle_sound = new Audio('audio/broken-bottle.mp3');
     coin_sound = new Audio('audio/coin.mp3');
     collect_bottle_sound = new Audio('audio/collect-bottle.mp3');
+    character_hurt_sound = new Audio('audio/hurt.mp3');
     defenseStart = false;
-    endbossHit = false;
+    endbossFirstHit = false;
     showEndbossStatus = false;
     soundManager;
+    gameOver = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -26,8 +27,8 @@ class World {
         this.keyboard = keyboard;
         this.soundManager = new SoundManager();
         this.soundManager.registerSound(this.coin_sound);
-        this.soundManager.registerSound(this.brocken_bottle_sound);
         this.soundManager.registerSound(this.collect_bottle_sound);
+        this.soundManager.registerSound(this.character_hurt_sound);
     }
 
     startGame() {
@@ -40,6 +41,8 @@ class World {
                 enemy.soundManager = this.soundManager;  // SoundManager an alle Enemies übergeben
             }
         });
+
+        this.throwableObjects.soundManager = this.soundManager;
         this.setWorld();
         this.draw();
         this.run();
@@ -55,17 +58,31 @@ class World {
 
     run() {
         setInterval(() => {
-            this.checkCollisionsChicken();
             this.checkThrowObjects();
             this.checkCollisionsBottle();
             this.checkCollisionsCoin();
-            this.checkCollisionBottleAndChicken();
+            this.checkCollisionBottleAndGround();
             this.checkdefenseEndboss();
+            this.checkEndbossDeath();
+            this.checkCharacterDeath();
+            this.checkCollisionBottleAndChicken();
         }, 100);
         setInterval(() => {
             this.checkJumpOfChicken();
+            this.checkCollisionsChicken();
 
         }, 1000 / 60);
+    }
+
+
+    checkCollisionBottleAndGround() {
+        this.throwableObjects.forEach((bottle, bottleIndex) => {
+            if (bottle.y > 360) {
+                bottle.playAnimation(bottle.IMAGES_BOTTLE_SPLASH);
+                this.soundManager.playSound(bottle.brocken_bottle_sound);
+                this.throwableObjects.splice(bottleIndex, 1);
+            }
+        });
     }
 
     checkThrowObjects() {
@@ -89,8 +106,9 @@ class World {
             if (this.character.isColliding(enemy) && !this.character.isJumpOfChicken(enemy)) {
                 if (!handleFirstContact) {
                     this.character.hit();
+                    this.soundManager.playSound(this.character_hurt_sound);
                     this.statusBarHealth.setPercentage(this.character.energy);
-                    this.character.speedX = -12;
+                    this.character.speedX = -15;
                     this.character.checkCollisionDirection(enemy);
                     handleFirstContact = true;
                 }
@@ -125,21 +143,27 @@ class World {
                 if (bottle.isColliding(enemy)) {
                     if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
                         enemy.enemyIsDead();
+                        bottle.playAnimation(bottle.IMAGES_BOTTLE_SPLASH);
+                        this.throwableObjects.splice(bottleIndex, 1);
                     }
                     if (enemy instanceof Endboss) {
-                        this.endbossHit = true;
+                        bottle.playAnimation(bottle.IMAGES_BOTTLE_SPLASH);
+                        this.endbossFirstHit = true;
                         enemy.hit();
+                        this.throwableObjects.splice(bottleIndex, 1);
+                        setTimeout(() => {
+                            this.throwableObjects.splice(bottleIndex, 1);
+                        }, 500);
                         this.statusBarEndboss.setPercentage(enemy.energy);
-                        this.soundManager.playSound(this.brocken_bottle_sound);
                     }
-                    this.throwableObjects.splice(bottleIndex, 1);
                 }
             });
         });
     }
 
+
     checkdefenseEndboss() {
-        if (this.character.x > 2200 && !this.defenseStart || this.endbossHit == true) {
+        if (this.character.x > 2200 && !this.defenseStart || this.endbossFirstHit == true) {
             this.defenseStart = true;
         }
     }
@@ -154,6 +178,29 @@ class World {
             }
         })
     }
+
+    checkEndbossDeath() {
+        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+        if (endboss && endboss.isDead()) {
+            this.gameOver = true;
+            setTimeout(() => {
+                showWinScreen();
+                clearAllIntervals();
+            }, 1500);
+
+        }
+    }
+
+    checkCharacterDeath() {
+        if (this.character.isDead()) {
+            this.gameOver = true;
+            setTimeout(() => {
+                showGameOverScreen();
+                clearAllIntervals();
+            }, 1500);
+        }
+    }
+
 
     // in dieser Funktion zeichnen wir alle Objekte
     draw() {

@@ -36,17 +36,17 @@
 
     <h1>El Pollo Loco</h1>
     <section id="content" class="content">
+
         <div id="startScreen" class="start-screen">
             <img id="startScreenImg" class="start-screen-img" src="img/9_intro_outro_screens/start/startscreen_2.png"
                 alt="">
-
             <div id="start-button-content" class="start-button-content">
                 <span onclick="startGame()" id="startBtn" class="start-button">START</span>
             </div>
         </div>
 
         <div id="controlButtons" class="control-buttons">
-            <div id="infoBtn" class="btn-group info-btn">
+            <div onclick="openDescription()" id="infoBtn" class="btn-group info-btn">
                 <img id="iconInfo" class="img-btn" src="icons/info.png" alt="">
             </div>
             <div onclick="toggleSound()" id="sountBtn" class="btn-group sound-btn">
@@ -57,14 +57,69 @@
             </div>
         </div>
 
-        <div id="infoScreen" class="info-screen"></div>
+        <div onclick="closeDescription()" id="infoScreen" class="info-screen dnone">
+            <div onclick="bubblingProtection(event)" class=" content-description">
+                <img onclick="closeDescription()" id="closeDescription" class="close-description" src="icons/close.png"
+                    alt="">
+                <h2>Pepe in der Wüste von Mexiko</h2>
+                <div class="description">
+                    Pepe, ein tapferer Abenteurer, reist durch die Wüste von Mexiko. Auf seiner Reise sammelt er
+                    Salsa-Flaschen und Münzen, um sich auf den finalen Kampf gegen den Endboss vorzubereiten.
+                    Mit Mut und Geschick besiegt Pepe Feinde und Hindernisse, um die Wüste zu retten.
+                </div>
+                <a href="#">Impressum</a>
+            </div>
+        </div>
+
+
         <div id="mobilePlayPanel" class="mobile-play-panel"></div>
         <div id="portraitWarningMobile" class="portrait-warning"></div>
-        <div id="endScreen" class="end-Screen"></div>
+
+
+
+        <div id="endScreenWin" class="end-screen-win dnone ">
+            <img id="endScreenImg" class="end-screen-img" src="img/9_intro_outro_screens/win/win_1.png" alt="">
+            <div class="end-buttons">
+                <span onclick="goHome()" id="goHome" class="go-home-button">HOME</span>
+                <span onclick="restartGame()" id="restartGame" class="restart-button">RESTART</span>
+            </div>
+        </div>
+
+        <div id="endScreenLost" class="end-screen-lost dnone">
+            <img id="endScreenImg" class="end-screen-lost-img" src="img/9_intro_outro_screens/game_over/game over!.png"
+                alt="">
+            <div class="end-buttons">
+                <span onclick="goHome()" id="goHome" class="go-home-button">HOME</span>
+                <span onclick="restartGame()" id="restartGame" class="restart-button">RESTART</span>
+            </div>
+        </div>
+
+
 
 
         <canvas id="canvas" width="720" height="480">
         </canvas>
+
+        <div id="controls" class="controls dnone">
+            <div class="btn arrow-left">
+                <img class="btn-single-arrow" src="icons/arrow-left.png" alt="">
+                <span class="button">MOVE LEFT</span>
+            </div>
+            <div class="btn arrow-right">
+                <img class="btn-single-arrow" src="icons/arrow-right.png" alt="">
+                <span class="button">MOVE RIGHT</span>
+            </div>
+            <div class="btn jump">
+                <img class="btn-single-d" src="icons/d-button.png" alt="">
+                <span class="button">THROW BOTTLE</span>
+            </div>
+            <div class="btn throw">
+                <div class="btn-space"></div>
+                <span class="button">JUMP</span>
+            </div>
+
+        </div>
+
     </section>
 
 </body>

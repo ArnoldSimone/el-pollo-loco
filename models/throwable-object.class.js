@@ -29,6 +29,8 @@ class ThrowableObject extends MovableObject {
         this.throw();
         this.applyGravity();
         this.speedY = 25;
+        this.soundManager = world.soundManager;
+        this.soundManager.registerSound(this.brocken_bottle_sound);
     }
 
     throw() {
@@ -43,8 +45,11 @@ class ThrowableObject extends MovableObject {
             }, 600);
         }, 100);
         if (!this.isAboveGround()) {
-            this.brocken_bottle_sound.play();
+            // this.soundManager.playSound(this.jump_sound);
+            this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
+
         }
+
     }
 
     setSpeedX() {

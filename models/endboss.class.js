@@ -52,6 +52,10 @@ class Endboss extends MovableObject {
     endboss_dead_sound = new Audio('audio/win.mp3');
 
     deadSoundPlayed = false;
+    attackTriggered = false;
+    attackStartTime = 0;
+    attackDuration = 2000;  // Dauer des Angriffs in ms (2 Sekunden)
+    jumpTriggered = false;
 
     constructor() {
         super().loadImage('img/4_enemie_boss_chicken/2_alert/G5.png');
@@ -62,42 +66,66 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.speed = 1;
         this.animate();
+        this.applyGravity();
         this.soundManager = world.soundManager;
         this.soundManager.registerSound(this.endboss_hit_sound);
         this.soundManager.registerSound(this.endboss_dead_sound);
     }
 
     animate() {
+
         setInterval(() => {
             if (this.defenseEndbossStart() && !this.isDead() && !this.isHurt()) {
                 this.moveLeft();
                 this.world.showEndbossStatus = true;
             }
+
+
         }, 1000 / 60);
+
+        setInterval(() => {
+            if (this.attackTriggered && !this.isHurt()) {
+                this.playAnimation(this.IMAGES_ATTACK);
+                // if (!this.jumpTriggered) {
+                // this.jump();
+                this.speed = 2;
+                // this.jumpTriggered = true;  // Setze die Variable, damit der Sprung nur einmal ausgeführt wird
+                // }
+                if (Date.now() - this.attackStartTime >= this.attackDuration) {
+                    this.attackTriggered = false;
+                    // this.jumpTriggered = false;
+                    this.speed = 1;
+                    this.currentImage = 0;
+                }
+            }
+
+        }, 120);
 
         setInterval(() => {
             if (this.isDead()) {
                 if (!this.deadSoundPlayed) {
                     this.soundManager.playSound(this.endboss_dead_sound);
                     this.deadSoundPlayed = true;
+                    this.jump();
                 }
                 this.playAnimation(this.IMAGES_DEAD);
                 setTimeout(() => {
                     this.endboss_dead_sound.pause();
-                    this.endboss_dead_sound.currentTime = 0; // Setzt die Wiedergabe zurück
+                    this.endboss_dead_sound.currentTime = 0;
                 }, 4000);
+
             } else if (this.isHurt() && !this.isDead()) {
                 this.soundManager.playSound(this.endboss_hit_sound);
                 this.playAnimation(this.IMAGES_HURT);
-                setTimeout(() => {
-                    this.playAnimation(this.IMAGES_ATTACK);
-                }, 2000);
-            } else if (this.defenseEndbossStart() && !this.isDead()) {
+                this.attackTriggered = true;
+                this.attackStartTime = Date.now();
+            }
+            if (this.defenseEndbossStart() && !this.isDead() && !this.isHurt() && !this.attackTriggered) {
                 this.playAnimation(this.IMAGES_WALK);
-            } else {
+            } else if (!this.isDead() && !this.isHurt() && !this.defenseEndbossStart()) {
                 this.playAnimation(this.IMAGES_ALERT);
             }
         }, 200);
-
     }
-} 
+
+}
