@@ -32,9 +32,11 @@
 
 </head>
 
-<body onload="initGame()">
+<body onresize="handleMobilePlayPanel();checkOrientation()" onload="initGame(); handleMobilePlayPanel()">
 
-    <h1>El Pollo Loco</h1>
+    <h1 id="headline">El Pollo Loco</h1>
+
+
     <section id="content" class="content">
 
         <div id="startScreen" class="start-screen">
@@ -58,26 +60,58 @@
         </div>
 
         <div onclick="closeDescription()" id="infoScreen" class="info-screen dnone">
-            <div onclick="bubblingProtection(event)" class=" content-description">
+            <div onclick="bubblingProtection(event)" class="content-description">
                 <img onclick="closeDescription()" id="closeDescription" class="close-description" src="icons/close.png"
                     alt="">
                 <h2>Pepe in der Wüste von Mexiko</h2>
                 <div class="description">
                     Pepe, ein tapferer Abenteurer, reist durch die Wüste von Mexiko. Auf seiner Reise sammelt er
                     Salsa-Flaschen und Münzen, um sich auf den finalen Kampf gegen den Endboss vorzubereiten.
-                    Mit Mut und Geschick besiegt Pepe Feinde und Hindernisse, um die Wüste zu retten.
+                    Mit Mut und Geschick besiegt Pepe Feinde und Hindernisse, um die Wüste zu retten. <br> Viel Spaß!
                 </div>
-                <a href="#">Impressum</a>
+
             </div>
         </div>
 
+        <div onclick="closeImpressum()" id="impressumScreen" class="impressum-screen dnone">
+            <div onclick="bubblingProtection(event)" class="content-impressum">
+                <img onclick="closeImpressum()" id="closeImpressum" class="close-impressum" src="icons/close.png"
+                    alt="">
+                <h3>Impressum & Nutzungsbedingungen</h3>
+                <div class="container-scroll">
+                    <h3 class="headline-impressum">Impressum</h3>
+                    Verantwortlich für diese Website:
 
-        <div id="mobilePlayPanel" class="mobile-play-panel"></div>
-        <div id="portraitWarningMobile" class="portrait-warning"></div>
+                    <br>Simone Arnold
+                    <br>Im Brumättle 22
+                    <br>77656 Offenburg
+                    <br>Telefon: +49 (0)176 83460239
+                    <br>E-Mail: sarnold2404@gmail.com
 
+                    <h3>Nutzungsbedingungen</h3>
+                    <div class="">
+                        Diese Website dient ausschließlich der Unterhaltung. Die Nutzung
+                        erfolgt auf eigenes Risiko. Wir übernehmen keine Haftung für Schäden,
+                        die durch die Nutzung der Website entstehen könnten. Alle Rechte
+                        vorbehalten.
+                    </div>
+                </div>
 
+            </div>
+        </div>
 
-        <div id="endScreenWin" class="end-screen-win dnone ">
+        <div id="mobilePlayPanel" class="mobile-play-panel dnone">
+            <div class="mobile-panel-left">
+                <img id="btnLeft" class="btn-mobile btn-single-arrow-left" src="icons/arrow-left.png" alt="">
+                <img id="btnRight" class="btn-mobile btn-single-arrow-right" src="icons/arrow-right.png" alt="">
+            </div>
+            <div class="mobile-panel-right">
+                <img id="btnThrow" class="btn-mobile btn-single-bottle-mobile" src="icons/mobile-bottle.png" alt="">
+                <img id="btnJump" class="btn-mobile btn-single-jump-mobile" src="icons/mobile-jump.png" alt="">
+            </div>
+        </div>
+
+        <div id="endScreenWin" class="end-screen-win dnone">
             <img id="endScreenImg" class="end-screen-img" src="img/9_intro_outro_screens/win/win_1.png" alt="">
             <div class="end-buttons">
                 <span onclick="goHome()" id="goHome" class="go-home-button">HOME</span>
@@ -93,9 +127,6 @@
                 <span onclick="restartGame()" id="restartGame" class="restart-button">RESTART</span>
             </div>
         </div>
-
-
-
 
         <canvas id="canvas" width="720" height="480">
         </canvas>
@@ -120,7 +151,13 @@
 
         </div>
 
+        <h2 onclick="openImpressum()" id="linkImpressum" class="link-impressum">Impressum</h2>
     </section>
+
+    <div id="portraitWarningMobile" class="portrait-warning dnone">
+        <div>please turn your device</div>
+        <img id="rotateImage" class="rotateImage" src="icons/turn-device.png" alt="">
+    </div>
 
 </body>
 

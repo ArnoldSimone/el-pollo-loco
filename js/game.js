@@ -9,23 +9,74 @@ bgMusic.loop = true;
 bgMusic.volume = 0.1;
 
 function initGame() {
+    checkOrientation();
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
+    keyboard.bindBtsPressEvents();
+}
+
+function startGame() {
+    if (!gameStarted) {
+        gameStarted = true;
+        hideStartScreen();
+        handleMobilePlayPanel();
+        world.startGame();
+        bgMusic.currentTime = 0;
+        bgMusic.play();
+    } else {
+        hideControls();
+        hideMobilePlayPanel();
+    }
+}
+
+function checkOrientation() {
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    let portraitWarningMobile = document.getElementById('portraitWarningMobile');
+    let headline = document.getElementById('headline');
+    let content = document.getElementById('content');
+
+    if (width <= 720 && height > width) {
+        portraitWarningMobile.classList.remove('dnone');
+        headline.classList.add('dnone');
+        content.classList.add('dnone');
+    } else {
+        portraitWarningMobile.classList.add('dnone');
+        headline.classList.remove('dnone');
+        content.classList.remove('dnone');
+    }
+}
+
+function showStartScreen() {
+    let startScreen = document.getElementById('startScreen');
+    startScreen.classList.remove('dnone');
+}
+
+function hideStartScreen() {
+    let startScreen = document.getElementById('startScreen');
+    startScreen.classList.add('dnone');
 }
 
 
-function startGame() {
-    let startScreen = document.getElementById('startScreen');
-    let controls = document.getElementById('controls');
-
-    if (!gameStarted) {
-        startScreen.classList.add('dnone');
-        controls.classList.remove('dnone');
-        world.startGame();
-        gameStarted = true;
-    } else {
-        // restartGame();
+function handleMobilePlayPanel() {
+    if (gameStarted && (window.innerWidth <= 720 || window.innerHeight <= 600)) {
+        showMobilePlayPanel();
+        hideControls();
+    } else if (gameStarted && (window.innerWidth > 720 && window.innerHeight > 600)) {
+        hideMobilePlayPanel();
+        showControls();
     }
+}
+
+function showMobilePlayPanel() {
+    let mobilePlayPanel = document.getElementById('mobilePlayPanel');
+    mobilePlayPanel.classList.remove('dnone');
+}
+
+function hideMobilePlayPanel() {
+    let mobilePlayPanel = document.getElementById('mobilePlayPanel');
+    mobilePlayPanel.classList.add('dnone');
 }
 
 function toggleSound() {
@@ -89,6 +140,16 @@ function openDescription() {
     infoScreen.classList.remove('dnone');
 }
 
+function closeImpressum() {
+    let impressumScreen = document.getElementById('impressumScreen');
+    impressumScreen.classList.add('dnone');
+}
+
+function openImpressum() {
+    let impressumScreen = document.getElementById('impressumScreen');
+    impressumScreen.classList.remove('dnone');
+}
+
 function bubblingProtection(event) {
     event.stopPropagation();
 }
@@ -97,22 +158,29 @@ function clearAllIntervals() {
     for (let i = 1; i < 9999; i++) window.clearInterval(i);
 }
 
-
 function showWinScreen() {
     let endScreenWin = document.getElementById('endScreenWin');
     endScreenWin.classList.remove('dnone');
+    hideControls();
+    hideMobilePlayPanel();
+    bgMusic.pause();
 }
 
 
 function showGameOverScreen() {
     let endScreenLost = document.getElementById('endScreenLost');
     endScreenLost.classList.remove('dnone');
+    hideControls();
+    hideMobilePlayPanel();
+    bgMusic.pause();
 }
 
 
 function goHome() {
     hideAllScreens();
     showStartScreen();
+    hideControls();
+    hideMobilePlayPanel();
     initLevel1();
     world = new World(canvas, keyboard);
     gameStarted = false;
@@ -124,7 +192,6 @@ function hideAllScreens() {
     endScreenWin.classList.add('dnone');
     let endScreenLost = document.getElementById('endScreenLost');
     endScreenLost.classList.add('dnone');
-
 }
 
 function restartGame() {
@@ -138,4 +205,16 @@ function restartGame() {
 function showStartScreen() {
     let startScreen = document.getElementById('startScreen');
     startScreen.classList.remove('dnone');
+    bgMusic.pause();
+    gameStarted = false;
+}
+
+function hideControls() {
+    let controls = document.getElementById('controls');
+    controls.classList.add('dnone');
+}
+
+function showControls() {
+    let controls = document.getElementById('controls');
+    controls.classList.remove('dnone');
 }

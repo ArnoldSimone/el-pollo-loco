@@ -6,11 +6,8 @@ class Keyboard {
     SPACE = false;
     D = false;
 
-
     constructor() {
         this.handleKeyEvents();
-        // this.bindBtnPressEvents();
-
     }
 
     handleKeyEvents() {
@@ -40,6 +37,7 @@ class Keyboard {
             }
         });
     }
+
     handleKeyUpEvents() {
         window.addEventListener('keyup', (e) => {
             if (e.keyCode == 39) {
@@ -64,36 +62,79 @@ class Keyboard {
     }
 
 
+    bindBtsPressEvents() {
+        let btnLeft = document.getElementById("btnLeft");
+        let btnRight = document.getElementById("btnRight");
+        let btnThrow = document.getElementById("btnThrow");
+        let btnJump = document.getElementById("btnJump");
 
-    // bindBtnPressEvents() {
-    //     document.addEventListener("DOMContentLoaded", () => {
-    //         const btnThrow = document.getElementById('btnThrow');
-    //         const btnRight = document.getElementById('btnRight');
-    //         const btnLeft = document.getElementById('btnLeft');
-    //         const btnUp = document.getElementById('btnUp');
+        if (btnLeft) {
+            btnLeft.addEventListener("touchstart", (e) => {
+                e.preventDefault();
+                this.LEFT = true;
+            });
+            btnLeft.addEventListener("touchend", (e) => {
+                e.preventDefault();
+                this.LEFT = false;
+            });
+            btnLeft.addEventListener("mousedown", () => {
+                this.LEFT = true;
+            });
+            btnLeft.addEventListener("mouseup", () => {
+                this.LEFT = false;
+            });
+        }
 
-    //         this.addEventListeners(btnThrow, 'SPACE');
-    //         this.addEventListeners(btnRight, 'RIGHT');
-    //         this.addEventListeners(btnLeft, 'LEFT');
-    //         this.addEventListeners(btnUp, 'UP');
-    //     });
-    // }
+        if (btnRight) {
+            btnRight.addEventListener("touchstart", (e) => {
+                e.preventDefault();
+                this.RIGHT = true;
+            });
+            btnRight.addEventListener("touchend", (e) => {
+                e.preventDefault();
+                this.RIGHT = false;
+            });
+            btnRight.addEventListener("mousedown", () => {
+                this.RIGHT = true;
+            });
+            btnRight.addEventListener("mouseup", () => {
+                this.RIGHT = false;
+            });
+        }
 
-    // addEventListeners(button, key) {
-    //     button.addEventListener('mousedown', () => {
-    //         this[key] = true;
-    //     });
-    //     button.addEventListener('mouseup', () => {
-    //         this[key] = false;
-    //     });
-    //     button.addEventListener('touchstart', (event) => {
-    //         event.preventDefault();
-    //         this[key] = true;
-    //     }, { passive: false });
-    //     button.addEventListener('touchend', (event) => {
-    //         event.preventDefault();
-    //         this[key] = false;
-    //     }, { passive: false });
-    // }
+        if (btnThrow) {
+            btnThrow.addEventListener("touchstart", (e) => {
+                e.preventDefault();
+                this.D = true;
+            });
+            btnThrow.addEventListener("touchend", (e) => {
+                e.preventDefault();
+                this.D = false;
+            });
+            btnThrow.addEventListener("mousedown", () => {
+                this.D = true;
+            });
+            btnThrow.addEventListener("mouseup", () => {
+                this.D = false;
+            });
+        }
+
+        if (btnJump) {
+            btnJump.addEventListener("touchstart", (e) => {
+                e.preventDefault();
+                this.SPACE = true;
+            });
+            btnJump.addEventListener("touchend", (e) => {
+                e.preventDefault();
+                this.SPACE = false;
+            });
+            btnJump.addEventListener("mousedown", () => {
+                this.SPACE = true;
+            });
+            btnJump.addEventListener("mouseup", () => {
+                this.SPACE = false;
+            });
+        }
+    }
 
 }

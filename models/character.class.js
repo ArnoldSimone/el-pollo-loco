@@ -76,6 +76,10 @@ class Character extends MovableObject {
     jump_sound = new Audio('audio/jump.mp3');
     snoring_sound = new Audio('audio/snoring.mp3');
     game_over_sound = new Audio('audio/game-over.mp3');
+    // Neue Variablen für den Tod und den Sprung nach dem Tod
+    isDeadState = false;   // Markiert, ob der Charakter tot ist (false = lebt)
+    jumpAfterDeath = false; // Bestimmt, ob der Charakter nach dem Tod noch einen Sprung machen soll
+
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -97,8 +101,6 @@ class Character extends MovableObject {
     }
 
     animate() {
-
-
         setInterval(() => {
             this.walking_sound.pause();
 
@@ -126,8 +128,16 @@ class Character extends MovableObject {
                     this.inactivityTimer = 0;
                 }
             }
+            if (this.isDead() && this.isDeadState && this.jumpAfterDeath) {
+                this.jump();  // Gib dem Charakter einen letzten Sprung
+                this.jumpAfterDeath = false;  // Verhindere mehrfaches Springen
+                this.soundManager.playSound(this.game_over_sound);
+            }
+
             this.world.camera_x = -this.x + 100;
+
             this.world.camera_x_slow = -this.x * this.world.speed_slow + 100;
+
             if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && !this.world.keyboard.D && !this.isAboveGround()) {
                 this.inactivityTimer++; // Increment the inactivity timer
             }
@@ -139,19 +149,11 @@ class Character extends MovableObject {
 
         setInterval(() => {
             if (this.isDead() && this.isDeadState) {
-                // Wenn der Charakter tot ist, spiele die Tod-Animation
                 this.playAnimation(this.IMAGES_DEAD);
-                if (this.jumpAfterDeath) {
-                    this.jump();  // Gib dem Charakter einen letzten Sprung
-                    this.jumpAfterDeath = false;  // Verhindere mehrfaches Springen
-                    this.soundManager.playSound(this.game_over_sound);
-                }
             } else if (this.isHurt() && !this.isDeadState) {
                 this.playAnimation(this.IMAGES_HURT);
-            } else {
-                if (!this.isAboveGround() && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
-                    this.playAnimation(this.IMAGES_WALKING);
-                }
+            } else if (!this.isAboveGround() && (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
+                this.playAnimation(this.IMAGES_WALKING);
             }
         }, 70);
 
@@ -176,17 +178,6 @@ class Character extends MovableObject {
             }
         }, 500);
 
-    }
-
-    checkOutOfBounds() {
-        if (this.y > canvasHeight) { // Hier canvasHeight mit der tatsächlichen Höhe deines Canvas ersetzen
-            this.isDeadState = false;  // Setze den Tod zurück und beende das Verhalten
-            this.x = 100;  // Setze die Position zurück
-            this.y = 160;  // Setze die Position zurück
-            this.speed = 6; // Setze die Geschwindigkeit zurück
-            this.applyGravity();  // Setze die Schwerkraft neu
-            this.applyHit(); // Setze die Kollisionen neu
-        }
     }
 
 }

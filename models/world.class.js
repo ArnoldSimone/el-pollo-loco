@@ -41,7 +41,6 @@ class World {
                 enemy.soundManager = this.soundManager;  // SoundManager an alle Enemies übergeben
             }
         });
-
         this.throwableObjects.soundManager = this.soundManager;
         this.setWorld();
         this.draw();
@@ -70,7 +69,6 @@ class World {
         setInterval(() => {
             this.checkJumpOfChicken();
             this.checkCollisionsChicken();
-
         }, 1000 / 60);
     }
 
@@ -101,7 +99,6 @@ class World {
 
     checkCollisionsChicken() {
         let handleFirstContact = false;
-
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && !this.character.isJumpOfChicken(enemy)) {
                 if (!handleFirstContact) {
