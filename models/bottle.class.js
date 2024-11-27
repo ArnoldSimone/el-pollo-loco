@@ -1,3 +1,7 @@
+/**
+ * Represents a bottle object in the game that can animate between different states (images).
+ * The bottle appears on the ground and cycles through different images to simulate an animation.
+ */
 class Bottle extends MovableObject {
     y = 370;
     width = 30;
@@ -15,6 +19,11 @@ class Bottle extends MovableObject {
         this.animate();
     }
 
+
+    /**
+     * Animates the bottle by cycling through its images at regular intervals.
+     * @returns {void}
+     */
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_BOTTLE);

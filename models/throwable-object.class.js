@@ -1,3 +1,7 @@
+/**
+ * Represents a throwable object (such as a bottle) in the game.
+ * The object rotates during flight and creates a splash animation when it hits a surface.
+ */
 class ThrowableObject extends MovableObject {
 
     IMAGES_BOTTLE_ROTATE = [
@@ -33,6 +37,11 @@ class ThrowableObject extends MovableObject {
         this.soundManager.registerSound(this.brocken_bottle_sound);
     }
 
+
+    /**
+     * Initiates the throwing action by setting the object's speed and starting the animation.
+     * Updates the x-coordinate of the object to move it along the screen.
+     */
     throw() {
         this.setSpeedX();
         setInterval(() => {
@@ -40,18 +49,14 @@ class ThrowableObject extends MovableObject {
         }, 25);
         setInterval(() => {
             this.playAnimation(this.IMAGES_BOTTLE_ROTATE);
-            setTimeout(() => {
-                this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
-            }, 600);
         }, 100);
-        if (!this.isAboveGround()) {
-            // this.soundManager.playSound(this.jump_sound);
-            this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
-
-        }
-
     }
 
+
+    /**
+     * Sets the horizontal speed of the bottle based on the character's direction and keyboard input.
+     * Adjusts the speed when the character is facing left or right.
+     */
     setSpeedX() {
         if (this.character.otherDirection == false && this.keyboard.RIGHT) {
             this.speedX = 15;

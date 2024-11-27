@@ -1,3 +1,7 @@
+/**
+ * Represents a movable object in the game, extending the basic drawable object functionality.
+ * It handles movement, gravity, collision detection, and health management.
+ */
 class MovableObject extends DrawableObject {
     speed = 0.15;
     otherDirection = false;
@@ -20,11 +24,16 @@ class MovableObject extends DrawableObject {
     collisionRight = false;
 
 
+    /**
+     * Applies gravity to the object by updating its vertical position.
+     * The object will fall if it is above the ground or if it is moving downwards.
+     * This method is repeatedly called at a set interval.
+     */
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
-                this.y -= this.speedY;  // hier verändern wir die y-Position
-                this.speedY -= this.acceleration; // hier verändern wir die Geschwindigkeit
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
                 this.setCorrectGround();
             }
             if (this.isDead()) {
@@ -35,6 +44,9 @@ class MovableObject extends DrawableObject {
     }
 
 
+    /**
+     * Adjusts the position of the object to stay above the ground (if the object is a character).
+     */
     setCorrectGround() {
         if (this.y > 160 && this instanceof Character) {
             this.y = 160;
@@ -42,6 +54,10 @@ class MovableObject extends DrawableObject {
     }
 
 
+    /**
+     * Applies the hit effect to the object, adjusting the horizontal position based on collision.
+     * This method is repeatedly called at a set interval.
+     */
     applyHit() {
         setInterval(() => {
             if (this.isHurt() || this.speedX < 0) {
@@ -58,89 +74,145 @@ class MovableObject extends DrawableObject {
         }, 1000 / 60);
     }
 
+
+    /**
+     * Checks if the object is above the ground.
+     * The method returns different results depending on the object type (e.g., `ThrowableObject`, `ChickenSmall`, `Endboss`).
+     * @returns {boolean} `true` if the object is above the ground, `false` otherwise.
+     */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
-            return true;  // Geworfene Objekte sind immer "in der Luft"
+            return true;
         } else if (this instanceof ChickenSmall) {
-            // Spezielle Logik für ChickenSmall, z.B. Höhe 380 für den Boden
-            return this.y < 380;  // Huhn ist in der Luft oder auf dem Boden, wenn y unter 380
+            return this.y < 380;
         } else if (this instanceof Endboss) {
-            // Spezielle Logik für ChickenSmall, z.B. Höhe 380 für den Boden
-            return this.y < 50;  // Huhn ist in der Luft oder auf dem Boden, wenn y unter 380
+            return this.y < 50;
         } else {
-            // Allgemeine Bedingung für andere Objekte, falls nötig
-            return this.y < 160;  //  Standardmäßig in der Luft, wenn y unter 160
+            return this.y < 160;
         }
     }
 
 
-
-
-    // character.isColliding(chicken);
+    /**
+     * Checks if the current object is colliding with another object.
+     * @param {Object} mo - The other object to check for collision.
+     * @returns {boolean} `true` if the objects are colliding, `false` otherwise.
+     */
     isColliding(mo) {
-        return this.x + this.width - this.offset.right > mo.x + mo.offset.left && // 
+        return this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
             this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
             this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
             this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom;
     }
 
-    checkCollisionDirection(mo) {
-        let thisCenterX = (this.x + this.width) / 2;
-        let otherCenterX = (mo.x + mo.width) / 2;
 
+    /**
+     * Checks the direction of collision between the current object and another object.
+     * @param {Object} mo - The other object to check for collision.
+     */
+    checkCollisionDirection(mo) {
         if (this.isColliding(mo)) {
-            if (thisCenterX < otherCenterX) {
-                this.collisionLeft = true;
-                this.collisionRight = false;
-            }
-            else if (thisCenterX > otherCenterX) {
-                this.collisionRight = true;
-                this.collisionLeft = false;
-            }
+            const thisCenterX = (this.x + this.width) / 2;
+            const otherCenterX = (mo.x + mo.width) / 2;
+            this.updateCollisionDirection(thisCenterX, otherCenterX);
         }
         return null;
     }
 
 
-    isJumpOfChicken(mo) {
-        // Check if the character is directly above the enemy (y-Position)
-        return this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
-            this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
-            this.y + this.height - 30 < mo.y && // Adjust to ensure the character is above the enemy
-            this.y + this.height > mo.y;  // Make sure the character is falling onto the chicken
+    /**
+     * Updates the collision direction based on the center positions of the current object and the other object.
+     * @param {number} thisCenterX - The x-coordinate of the center of the current object.
+     * @param {number} otherCenterX - The x-coordinate of the center of the other object.
+     */
+    updateCollisionDirection(thisCenterX, otherCenterX) {
+        if (thisCenterX < otherCenterX) {
+            this.collisionLeft = true;
+            this.collisionRight = false;
+        } else if (thisCenterX > otherCenterX) {
+            this.collisionRight = true;
+            this.collisionLeft = false;
+        }
     }
 
 
+    /**
+     * Checks if a jump event has occurred with a specific object (e.g., hitting the top of an object).
+     * @param {Object} mo - The other object to check for collision with the current object's jump.
+     * @returns {boolean} `true` if the object has jumped on top of another, `false` otherwise.
+     */
+    isJumpOfChicken(mo) {
+        return this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+            this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+            this.y + this.height - 30 < mo.y &&
+            this.y + this.height > mo.y;
+    }
+
+
+    /**
+     * Handles the hit logic for the object. 
+     * If the object is an Endboss, it reduces energy and updates hit status accordingly.
+     */
     hit() {
-        if (this instanceof Endboss && this.isHurt()) {
-            this.energy -= 25;
-            return; // Verhindert mehrfachen Schaden innerhalb von 1 Sekunde
-        } else {
-            this.energy -= 25;
+        if (this instanceof Endboss && !this.isHurt()) {
+            this.reduceEnergy(25);
+            this.isHitByBottle = false;
+            this.lastHit = new Date().getTime();
+            return;
         }
+        this.reduceEnergy(25);
+        this.lastHit = new Date().getTime();
+    }
+
+
+    /**
+     * Reduces the energy of the object by a specified amount.
+     * Ensures the energy doesn't drop below 0.
+     * @param {number} amount - The amount by which the energy will be reduced.
+     */
+    reduceEnergy(amount) {
+        this.energy -= amount;
         if (this.energy < 0) {
             this.energy = 0;
         }
-        this.lastHit = new Date().getTime();
-
     }
 
+
+    /**
+     * Checks if the object is currently hurt (i.e., if the last hit occurred less than 1 second ago).
+     * @returns {boolean} `true` if the object is hurt, `false` otherwise.
+     */
     isHurt() {
-        let timepassed = new Date().getTime() - this.lastHit; // Difference in ms
-        timepassed = timepassed / 1000; // Difference in sec
+        let timepassed = new Date().getTime() - this.lastHit;
+        timepassed = timepassed / 1000;
         return timepassed < 1;
     }
 
+
+    /**
+     * Checks if the object is dead (i.e., if its energy is 0).
+     * @returns {boolean} `true` if the object is dead, `false` otherwise.
+     */
     isDead() {
         return this.energy == 0;
     }
 
+
+    /**
+     * Retrieves the defense start flag for the Endboss from the world.
+     * @returns {boolean} The defense start flag from the world.
+     */
     defenseEndbossStart() {
         if (this.world) {
             return this.world.defenseStart;
         }
     }
 
+
+    /**
+     * Plays the object's animation based on the provided images.
+     * @param {Array} images - The array of image paths to use for the animation.
+     */
     playAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
@@ -148,16 +220,27 @@ class MovableObject extends DrawableObject {
         this.currentImage++;
     }
 
+
+    /**
+     * Moves the object to the right by its speed value.
+     */
     moveRight() {
         this.x += this.speed;
     }
 
+
+    /**
+     * Moves the object to the left by its speed value.
+     */
     moveLeft() {
         this.x -= this.speed;
     }
 
-    jump() {
-        this.speedY = 25; // Normale Sprungkraft
-    }
 
+    /**
+     * Makes the object jump by setting its vertical speed.
+     */
+    jump() {
+        this.speedY = 25;
+    }
 }

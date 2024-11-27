@@ -1,3 +1,7 @@
+/**
+ * Represents a keyboard input handler for detecting key events and button presses.
+ * This class listens for both physical key presses and touch/mouse events from HTML buttons.
+ */
 class Keyboard {
     LEFT = false;
     RIGHT = false;
@@ -10,11 +14,22 @@ class Keyboard {
         this.handleKeyEvents();
     }
 
+
+    /**
+     * Sets up event listeners for both keydown and keyup events.
+     * Calls the methods to handle keydown and keyup events respectively.
+     */
     handleKeyEvents() {
         this.handleKeyDownEvents();
         this.handleKeyUpEvents();
     }
 
+
+    /**
+     * Sets up event listeners for the keydown events.
+     * This method updates the state of various keys (LEFT, RIGHT, UP, DOWN, SPACE, D) 
+     * based on the key codes when a key is pressed down.
+     */
     handleKeyDownEvents() {
         window.addEventListener('keydown', (e) => {
             if (e.keyCode == 39) {
@@ -38,6 +53,12 @@ class Keyboard {
         });
     }
 
+
+    /**
+     * Sets up event listeners for the keyup events.
+     * This method updates the state of various keys (LEFT, RIGHT, UP, DOWN, SPACE, D) 
+     * based on the key codes when a key is released.
+     */
     handleKeyUpEvents() {
         window.addEventListener('keyup', (e) => {
             if (e.keyCode == 39) {
@@ -62,79 +83,40 @@ class Keyboard {
     }
 
 
+    /**
+     * Binds touch and mouse events to HTML buttons for simulating key presses.
+     * Associates each button with a specific action property (e.g., LEFT, RIGHT, SPACE, D).
+     */
     bindBtsPressEvents() {
-        let btnLeft = document.getElementById("btnLeft");
-        let btnRight = document.getElementById("btnRight");
-        let btnThrow = document.getElementById("btnThrow");
-        let btnJump = document.getElementById("btnJump");
+        this.addButtonEventListeners("btnLeft", "LEFT");
+        this.addButtonEventListeners("btnRight", "RIGHT");
+        this.addButtonEventListeners("btnThrow", "D");
+        this.addButtonEventListeners("btnJump", "SPACE");
+    }
 
-        if (btnLeft) {
-            btnLeft.addEventListener("touchstart", (e) => {
-                e.preventDefault();
-                this.LEFT = true;
-            });
-            btnLeft.addEventListener("touchend", (e) => {
-                e.preventDefault();
-                this.LEFT = false;
-            });
-            btnLeft.addEventListener("mousedown", () => {
-                this.LEFT = true;
-            });
-            btnLeft.addEventListener("mouseup", () => {
-                this.LEFT = false;
-            });
-        }
 
-        if (btnRight) {
-            btnRight.addEventListener("touchstart", (e) => {
+    /**
+     * Adds touch and mouse event listeners to an HTML button to simulate key press actions.
+     * @param {string} btnId - The ID of the button element.
+     * @param {string} actionProperty - The property name to be set (e.g., 'LEFT', 'RIGHT', 'D', 'SPACE') when the button is pressed or released.
+     */
+    addButtonEventListeners(btnId, actionProperty) {
+        let btn = document.getElementById(btnId);
+        if (btn) {
+            btn.addEventListener("touchstart", (e) => {
                 e.preventDefault();
-                this.RIGHT = true;
+                this[actionProperty] = true;
             });
-            btnRight.addEventListener("touchend", (e) => {
+            btn.addEventListener("touchend", (e) => {
                 e.preventDefault();
-                this.RIGHT = false;
+                this[actionProperty] = false;
             });
-            btnRight.addEventListener("mousedown", () => {
-                this.RIGHT = true;
+            btn.addEventListener("mousedown", () => {
+                this[actionProperty] = true;
             });
-            btnRight.addEventListener("mouseup", () => {
-                this.RIGHT = false;
-            });
-        }
-
-        if (btnThrow) {
-            btnThrow.addEventListener("touchstart", (e) => {
-                e.preventDefault();
-                this.D = true;
-            });
-            btnThrow.addEventListener("touchend", (e) => {
-                e.preventDefault();
-                this.D = false;
-            });
-            btnThrow.addEventListener("mousedown", () => {
-                this.D = true;
-            });
-            btnThrow.addEventListener("mouseup", () => {
-                this.D = false;
-            });
-        }
-
-        if (btnJump) {
-            btnJump.addEventListener("touchstart", (e) => {
-                e.preventDefault();
-                this.SPACE = true;
-            });
-            btnJump.addEventListener("touchend", (e) => {
-                e.preventDefault();
-                this.SPACE = false;
-            });
-            btnJump.addEventListener("mousedown", () => {
-                this.SPACE = true;
-            });
-            btnJump.addEventListener("mouseup", () => {
-                this.SPACE = false;
+            btn.addEventListener("mouseup", () => {
+                this[actionProperty] = false;
             });
         }
     }
-
 }

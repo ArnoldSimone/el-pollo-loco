@@ -1,0 +1,163 @@
+::-webkit-scrollbar {
+    width: 4px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #C69B5D;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #76301da2;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #c69b5d;
+}
+
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+
+    .controls {
+        display: none;
+    }
+
+    .start-button {
+        top: 30px;
+    }
+
+    .go-home-button {
+        bottom: 90px;
+        left: 60px;
+        font-size: 28px;
+    }
+
+    .restart-button {
+        bottom: 90px;
+        right: 60px;
+        font-size: 28px;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    .start-button {
+        font-size: 28px;
+    }
+
+    .img-btn {
+        width: 18px;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
+
+    .img-btn {
+        width: 18px;
+    }
+
+    .start-button {
+        font-size: 36px;
+        top: 40px;
+    }
+
+    .go-home-button {
+        bottom: 90px;
+        left: 60px;
+        font-size: 28px;
+    }
+
+    .restart-button {
+        bottom: 90px;
+        right: 60px;
+        font-size: 28px;
+    }
+}
+
+@media only screen and (max-height: 700px) {
+    h1 {
+        display: none;
+    }
+}
+
+@media only screen and (max-height: 600px) {
+    h2 {
+        font-size: 20px;
+    }
+
+    .description {
+        font-size: 20px;
+        padding: 0 16px;
+    }
+
+    .content-description,
+    .content-impressum {
+        top: 30px;
+        left: 30px;
+        bottom: 30px;
+        right: 30px;
+    }
+
+    .container-scroll {
+        font-size: 14px;
+        margin: 12px;
+    }
+
+    .close-description,
+    .close-impressum {
+        width: 20px;
+    }
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes rotateAndFade {
+    0% {
+        opacity: 0;
+        transform: rotate(0deg);
+    }
+
+    20% {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+
+    40% {
+        opacity: 1;
+        transform: rotate(-90deg);
+    }
+
+    60% {
+        opacity: 1;
+        transform: rotate(-90deg);
+    }
+
+    80% {
+        opacity: 0;
+        transform: rotate(-90deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: rotate(0deg);
+    }
+}

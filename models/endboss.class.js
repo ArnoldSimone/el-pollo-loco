@@ -1,15 +1,18 @@
+/**
+ * Represents the Endboss in the game, which is a large enemy with various states such as walking, alert, attacking, and dying.
+ * The Endboss can move, attack, be hurt, and eventually die, with corresponding animations and sound effects for each state.
+ */
 class Endboss extends MovableObject {
     y = 50;
     width = 300;
     height = 400;
     x = 2500;
     offset = {
-        top: 150,
-        bottom: 80,
-        left: 60,
+        top: 80,
+        bottom: 60,
+        left: 40,
         right: 60
     };
-
     IMAGES_WALK = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -46,15 +49,13 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G25.png',
         'img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
-
     soundManager = new SoundManager();
     endboss_hit_sound = new Audio('audio/endboss-hit.mp3');
     endboss_dead_sound = new Audio('audio/win.mp3');
-
     deadSoundPlayed = false;
     attackTriggered = false;
     attackStartTime = 0;
-    attackDuration = 2000;  // Dauer des Angriffs in ms (2 Sekunden)
+    attackDuration = 2000;
     jumpTriggered = false;
 
     constructor() {
@@ -72,60 +73,93 @@ class Endboss extends MovableObject {
         this.soundManager.registerSound(this.endboss_dead_sound);
     }
 
+
+    /**
+     * Starts the animation loops for the Endboss, including movement, attack, and dead state.
+     * @returns {void}
+     */
     animate() {
-
+        setInterval(() => this.moveLeftEndboss(), 1000 / 60);
         setInterval(() => {
-            if (this.defenseEndbossStart() && !this.isDead() && !this.isHurt()) {
-                this.moveLeft();
-                this.world.showEndbossStatus = true;
-            }
-
-
-        }, 1000 / 60);
-
-        setInterval(() => {
-            if (this.attackTriggered && !this.isHurt()) {
-                this.playAnimation(this.IMAGES_ATTACK);
-                // if (!this.jumpTriggered) {
-                // this.jump();
-                this.speed = 2;
-                // this.jumpTriggered = true;  // Setze die Variable, damit der Sprung nur einmal ausgeführt wird
-                // }
-                if (Date.now() - this.attackStartTime >= this.attackDuration) {
-                    this.attackTriggered = false;
-                    // this.jumpTriggered = false;
-                    this.speed = 1;
-                    this.currentImage = 0;
-                }
-            }
-
+            this.attackEndboss();
+            this.deadJumpEndboss();
         }, 120);
-
-        setInterval(() => {
-            if (this.isDead()) {
-                if (!this.deadSoundPlayed) {
-                    this.soundManager.playSound(this.endboss_dead_sound);
-                    this.deadSoundPlayed = true;
-                    this.jump();
-                }
-                this.playAnimation(this.IMAGES_DEAD);
-                setTimeout(() => {
-                    this.endboss_dead_sound.pause();
-                    this.endboss_dead_sound.currentTime = 0;
-                }, 4000);
-
-            } else if (this.isHurt() && !this.isDead()) {
-                this.soundManager.playSound(this.endboss_hit_sound);
-                this.playAnimation(this.IMAGES_HURT);
-                this.attackTriggered = true;
-                this.attackStartTime = Date.now();
-            }
-            if (this.defenseEndbossStart() && !this.isDead() && !this.isHurt() && !this.attackTriggered) {
-                this.playAnimation(this.IMAGES_WALK);
-            } else if (!this.isDead() && !this.isHurt() && !this.defenseEndbossStart()) {
-                this.playAnimation(this.IMAGES_ALERT);
-            }
-        }, 200);
+        setInterval(() => this.playAnimationEndboss(), 200);
     }
 
+
+    /**
+      * Handles the Endboss's attack animation and resets the attack state after the attack duration.
+      */
+    attackEndboss() {
+        if (this.attackTriggered && !this.isHurt()) {
+            this.playAnimation(this.IMAGES_ATTACK);
+            if (Date.now() - this.attackStartTime >= this.attackDuration) {
+                this.attackTriggered = false;
+                this.speed = 1.5;
+                this.currentImage = 0;
+            }
+        }
+    }
+
+
+    /**
+     * Moves the Endboss to the left if it is in a defensive state and is not dead or hurt.
+     */
+    moveLeftEndboss() {
+        if (this.defenseEndbossStart() && !this.isDead() && !this.isHurt()) {
+            this.moveLeft();
+            this.world.showEndbossStatus = true;
+        }
+    }
+
+
+    /**
+     * Makes the Endboss "jump" when it dies and plays the dead sound effect.
+     */
+    deadJumpEndboss() {
+        if (this.isDead() && !this.deadSoundPlayed) {
+            this.deadSoundPlayed = true;
+            this.jump();
+        }
+    }
+
+
+    /**
+     * Plays the appropriate animation for the Endboss based on its current state (Dead, Hurt, Walking, Alert).
+     */
+    playAnimationEndboss() {
+        if (this.isDead()) {
+            this.playDeadEndboss();
+        } else if (this.isHurt() && !this.isDead()) {
+            this.playHurtEndboss();
+        } else if (this.defenseEndbossStart() && !this.isDead() && !this.isHurt() && !this.attackTriggered) {
+            this.playAnimation(this.IMAGES_WALK);
+        } else if (!this.isDead() && !this.isHurt() && !this.defenseEndbossStart()) {
+            this.playAnimation(this.IMAGES_ALERT);
+        }
+    }
+
+
+    /**
+    * Plays the dead animation for the Endboss and triggers the dead sound effect.
+    */
+    playDeadEndboss() {
+        this.playAnimation(this.IMAGES_DEAD);
+        this.soundManager.playSound(this.endboss_dead_sound);
+        setTimeout(() => {
+            this.endboss_dead_sound.pause();
+        }, 4000);
+    }
+
+
+    /**
+     * Plays the hurt animation for the Endboss and triggers the hit sound effect.
+     */
+    playHurtEndboss() {
+        this.soundManager.playSound(this.endboss_hit_sound);
+        this.playAnimation(this.IMAGES_HURT);
+        this.attackTriggered = true;
+        this.attackStartTime = Date.now();
+    }
 }

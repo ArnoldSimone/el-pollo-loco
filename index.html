@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="animation.css">
     <link rel="shortcut icon" href="icons/sombrero.png" type="image/x-icon">
     <title>El Pollo Loco</title>
-
     <script src="models/soundManager.class.js"></script>
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
@@ -29,24 +29,19 @@
     <script src="models/throwable-object.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="js/game.js"></script>
-
 </head>
 
 <body onresize="handleMobilePlayPanel();checkOrientation()" onload="initGame(); handleMobilePlayPanel()">
-
     <h1 id="headline">El Pollo Loco</h1>
-
-
     <section id="content" class="content">
-
         <div id="startScreen" class="start-screen">
             <img id="startScreenImg" class="start-screen-img" src="img/9_intro_outro_screens/start/startscreen_2.png"
                 alt="">
             <div id="start-button-content" class="start-button-content">
                 <span onclick="startGame()" id="startBtn" class="start-button">START</span>
             </div>
+            <h2 onclick="openImpressum()" id="linkImpressum" class="link-impressum">Impressum</h2>
         </div>
-
         <div id="controlButtons" class="control-buttons">
             <div onclick="openDescription()" id="infoBtn" class="btn-group info-btn">
                 <img id="iconInfo" class="img-btn" src="icons/info.png" alt="">
@@ -58,7 +53,6 @@
                 <img id="iconFullscreen" class="img-btn" src="icons/fullscreen.png" alt="">
             </div>
         </div>
-
         <div onclick="closeDescription()" id="infoScreen" class="info-screen dnone">
             <div onclick="bubblingProtection(event)" class="content-description">
                 <img onclick="closeDescription()" id="closeDescription" class="close-description" src="icons/close.png"
@@ -72,7 +66,6 @@
 
             </div>
         </div>
-
         <div onclick="closeImpressum()" id="impressumScreen" class="impressum-screen dnone">
             <div onclick="bubblingProtection(event)" class="content-impressum">
                 <img onclick="closeImpressum()" id="closeImpressum" class="close-impressum" src="icons/close.png"
@@ -81,13 +74,11 @@
                 <div class="container-scroll">
                     <h3 class="headline-impressum">Impressum</h3>
                     Verantwortlich für diese Website:
-
                     <br>Simone Arnold
                     <br>Im Brumättle 22
                     <br>77656 Offenburg
                     <br>Telefon: +49 (0)176 83460239
                     <br>E-Mail: sarnold2404@gmail.com
-
                     <h3>Nutzungsbedingungen</h3>
                     <div class="">
                         Diese Website dient ausschließlich der Unterhaltung. Die Nutzung
@@ -96,10 +87,8 @@
                         vorbehalten.
                     </div>
                 </div>
-
             </div>
         </div>
-
         <div id="mobilePlayPanel" class="mobile-play-panel dnone">
             <div class="mobile-panel-left">
                 <img id="btnLeft" class="btn-mobile btn-single-arrow-left" src="icons/arrow-left.png" alt="">
@@ -110,7 +99,6 @@
                 <img id="btnJump" class="btn-mobile btn-single-jump-mobile" src="icons/mobile-jump.png" alt="">
             </div>
         </div>
-
         <div id="endScreenWin" class="end-screen-win dnone">
             <img id="endScreenImg" class="end-screen-img" src="img/9_intro_outro_screens/win/win_1.png" alt="">
             <div class="end-buttons">
@@ -118,7 +106,6 @@
                 <span onclick="restartGame()" id="restartGame" class="restart-button">RESTART</span>
             </div>
         </div>
-
         <div id="endScreenLost" class="end-screen-lost dnone">
             <img id="endScreenImg" class="end-screen-lost-img" src="img/9_intro_outro_screens/game_over/game over!.png"
                 alt="">
@@ -127,38 +114,31 @@
                 <span onclick="restartGame()" id="restartGame" class="restart-button">RESTART</span>
             </div>
         </div>
-
         <canvas id="canvas" width="720" height="480">
         </canvas>
-
         <div id="controls" class="controls dnone">
-            <div class="btn arrow-left">
-                <img class="btn-single-arrow" src="icons/arrow-left.png" alt="">
+            <div class="btns arrow-left">
+                <img class="btn btn-single-arrow" src="icons/arrow-left.png" alt="">
                 <span class="button">MOVE LEFT</span>
             </div>
-            <div class="btn arrow-right">
-                <img class="btn-single-arrow" src="icons/arrow-right.png" alt="">
+            <div class="btns arrow-right">
+                <img class="btn btn-single-arrow" src="icons/arrow-right.png" alt="">
                 <span class="button">MOVE RIGHT</span>
             </div>
-            <div class="btn jump">
-                <img class="btn-single-d" src="icons/d-button.png" alt="">
+            <div class="btns jump">
+                <img class="btn btn-single-d" src="icons/d-button.png" alt="">
                 <span class="button">THROW BOTTLE</span>
             </div>
-            <div class="btn throw">
-                <div class="btn-space"></div>
+            <div class="btns throw">
+                <div class="btn btn-space"></div>
                 <span class="button">JUMP</span>
             </div>
-
         </div>
-
-        <h2 onclick="openImpressum()" id="linkImpressum" class="link-impressum">Impressum</h2>
     </section>
-
     <div id="portraitWarningMobile" class="portrait-warning dnone">
-        <div>please turn your device</div>
+        <div>Please turn your device</div>
         <img id="rotateImage" class="rotateImage" src="icons/turn-device.png" alt="">
     </div>
-
 </body>
 
 </html>
