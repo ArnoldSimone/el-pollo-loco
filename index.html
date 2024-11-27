@@ -23,6 +23,7 @@
     <script src="models/status-bar-health.class.js"></script>
     <script src="models/status-bar-coin.class.js"></script>
     <script src="models/status-bar-endboss.class.js"></script>
+    <script src="models/collisions-handler.class.js"></script>
     <script src="models/world.class.js"></script>
     <script src="models/level.class.js"></script>
     <script src="models/endboss.class.js"></script>
@@ -38,7 +39,7 @@
             <img id="startScreenImg" class="start-screen-img" src="img/9_intro_outro_screens/start/startscreen_2.png"
                 alt="">
             <div id="start-button-content" class="start-button-content">
-                <span onclick="startGame()" id="startBtn" class="start-button">START</span>
+                <span onclick="startGame()" id="startBtn" class="start-button">START GAME</span>
             </div>
             <h2 onclick="openImpressum()" id="linkImpressum" class="link-impressum">Impressum</h2>
         </div>
@@ -61,7 +62,8 @@
                 <div class="description">
                     Pepe, ein tapferer Abenteurer, reist durch die Wüste von Mexiko. Auf seiner Reise sammelt er
                     Salsa-Flaschen und Münzen, um sich auf den finalen Kampf gegen den Endboss vorzubereiten.
-                    Mit Mut und Geschick besiegt Pepe Feinde und Hindernisse, um die Wüste zu retten. <br> Viel Spaß!
+                    Mit Mut und Geschick besiegt Pepe Feinde und Hindernisse, um die Wüste zu retten. <br><br> Viel
+                    Spaß!
                 </div>
 
             </div>
@@ -80,12 +82,14 @@
                     <br>Telefon: +49 (0)176 83460239
                     <br>E-Mail: sarnold2404@gmail.com
                     <h3>Nutzungsbedingungen</h3>
-                    <div class="">
+                    <div>
                         Diese Website dient ausschließlich der Unterhaltung. Die Nutzung
                         erfolgt auf eigenes Risiko. Wir übernehmen keine Haftung für Schäden,
                         die durch die Nutzung der Website entstehen könnten. Alle Rechte
                         vorbehalten.
                     </div>
+                    <br>
+                    <div>Icons by <a href="https://icons8.de/" target="_blank">Icons8</a></div>
                 </div>
             </div>
         </div>

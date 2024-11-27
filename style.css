@@ -9,6 +9,12 @@ body {
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+    color: #76301d;
+    font-weight: bold;
+}
+
 body {
     display: flex;
     flex-direction: column;
