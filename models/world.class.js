@@ -3,8 +3,6 @@
  * status bars, enemies, and all game objects. It controls game logic, 
  * collisions, and rendering.
  */
-
-
 class World {
     character;
     level;

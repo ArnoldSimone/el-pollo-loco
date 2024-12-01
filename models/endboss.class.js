@@ -65,7 +65,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-        this.speed = 1;
+        this.speed = 2;
         this.animate();
         this.applyGravity();
         this.soundManager = world.soundManager;
@@ -94,9 +94,10 @@ class Endboss extends MovableObject {
     attackEndboss() {
         if (this.attackTriggered && !this.isHurt()) {
             this.playAnimation(this.IMAGES_ATTACK);
+            this.speed = 4;
             if (Date.now() - this.attackStartTime >= this.attackDuration) {
                 this.attackTriggered = false;
-                this.speed = 1.5;
+                this.speed = 1;
                 this.currentImage = 0;
             }
         }

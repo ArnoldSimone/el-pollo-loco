@@ -128,6 +128,7 @@ class CollisionHandler {
         this.updateBottleSpeed(bottle);
         this.removeBottleAfterDelay(bottleIndex);
         this.hitEndbossIfNeeded(enemy);
+        this.world.endbossFirstHit = true;
     }
 
 

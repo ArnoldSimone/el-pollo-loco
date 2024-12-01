@@ -106,13 +106,22 @@ function hideStartScreen() {
  * Handles the display of the mobile play panel and the controls based on screen size and game state.
  */
 function handleMobilePlayPanel() {
-    if (gameStarted && (window.innerWidth <= 720 || window.innerHeight <= 600)) {
+    if (gameStarted && (isTouchDevice() || window.innerWidth <= 720 || window.innerHeight <= 600)) {
         showMobilePlayPanel();
         hideControls();
-    } else if (gameStarted && (window.innerWidth > 720 && window.innerHeight > 600)) {
+    } else if (gameStarted && !isTouchDevice() && (window.innerWidth > 720 && window.innerHeight > 600)) {
         hideMobilePlayPanel();
         showControls();
     }
+}
+
+
+/**
+ * Checks if the device supports touch input.
+ * @returns {boolean} `true` if the device is a touch device, otherwise `false`.
+ */
+function isTouchDevice() {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 }
 
 
