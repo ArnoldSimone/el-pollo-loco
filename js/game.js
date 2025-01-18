@@ -193,7 +193,7 @@ function openFullscreen() {
     let iconFullscreen = document.getElementById('iconFullscreen');
     if (!document.fullscreenElement) {
         enterFullscreen(content);
-        iconFullscreen.src = 'icons/minimize.png';
+        iconFullscreen.src = 'img/minimize.png';
     } else {
         exitFullscreen();
         iconFullscreen.src = 'img/fullscreen.png';
