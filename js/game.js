@@ -150,8 +150,8 @@ function hideMobilePlayPanel() {
 function toggleSound() {
     let iconSound = document.getElementById('iconSound');
     world.soundManager.toggleSound();
-    let soundOffPath = 'icons/sound-off.png';
-    let soundOnPath = 'icons/sound-play.png';
+    let soundOffPath = 'img/sound-off.png';
+    let soundOnPath = 'img/sound-play.png';
     if (soundOn) {
         setSoundOff(iconSound, soundOffPath);
     } else {
@@ -196,7 +196,7 @@ function openFullscreen() {
         iconFullscreen.src = 'icons/minimize.png';
     } else {
         exitFullscreen();
-        iconFullscreen.src = 'icons/fullscreen.png';
+        iconFullscreen.src = 'img/fullscreen.png';
     }
 }
 

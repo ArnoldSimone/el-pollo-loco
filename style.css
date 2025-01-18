@@ -336,7 +336,7 @@ canvas {
 }
 
 .btn-mobile {
-    padding: 6px;
+    padding: 8px;
     background-color: #c69a5d;
     border: 1px solid #76301d46;
     border-radius: 50%;
@@ -344,23 +344,23 @@ canvas {
     height: 5%;
     box-shadow: 2px 4px 4px #76301d;
     position: absolute;
-    bottom: 8px;
+    bottom: 16px;
 }
 
 .btn-single-arrow-left {
-    left: 30px;
+    left: 50px;
 }
 
 .btn-single-arrow-right {
-    left: 100px;
+    left: 150px;
 }
 
 .btn-single-bottle-mobile {
-    right: 30px;
+    right: 50px;
 }
 
 .btn-single-jump-mobile {
-    right: 100px;
+    right: 150px;
 }
 
 .btn-mobile:hover {
